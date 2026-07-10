@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Augusto Digital | Engagement Proposal</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;900&family=Neuton:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy-bg: #122B3B;
+  --navy-text: #0E1E2B;
+  --green: #22B161;
+  --green-dark: #128745;
+  --teal: #0989B1;
+  --bg-default: #F1F3F5;
+  --gray-100: #E5E9EC;
+  --gray-200: #C2C8CC;
+  --gray-300: #818B92;
+  --gray-400: #686C76;
+  --font-display: 'Neuton', Georgia, serif;
+  --font-primary: 'Barlow', system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-primary); background: var(--bg-default); color: var(--navy-text); min-height: 100vh; }
+.screen { display: none; min-height: 100vh; flex-direction: column; }
+.screen.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeIn 0.32s ease forwards; }
+
+/* ── NAV ── */
+.nav { background: var(--navy-bg); padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.nav-wordmark { color: white; font-family: var(--font-primary); font-weight: 600; font-size: 17px; display: flex; align-items: center; gap: 10px; }
+
+/* ── GLOBAL PROGRESS BAR ── */
+#progress-bar-global { background: white; border-bottom: 1px solid var(--gray-100); flex-shrink: 0; padding: 0 40px; display: none; }
+.progress-inner { max-width: 980px; margin: 0 auto; display: flex; align-items: center; padding: 13px 0; }
+.progress-step {
+  display: flex; align-items: center; gap: 7px;
+  cursor: pointer; border-radius: 8px; padding: 5px 8px; margin: -5px -8px;
+  transition: background 0.15s; user-select: none;
+}
+.progress-step:hover { background: rgba(18,43,59,0.06); }
+.step-dot {
+  width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--gray-200);
+  background: white; display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: var(--gray-300); flex-shrink: 0; transition: all 0.2s;
+}
+.step-dot.active { border-color: var(--green); background: var(--green); color: white; }
+.step-dot.done { border-color: var(--green-dark); background: var(--green-dark); color: white; }
+.step-label { font-size: 11px; font-weight: 500; color: var(--gray-300); white-space: nowrap; }
+.step-label.active { color: var(--navy-text); font-weight: 700; }
+.step-label.done { color: var(--green-dark); }
+.step-connector { height: 2px; background: var(--gray-200); flex: 1; margin: 0 4px; min-width: 8px; transition: background 0.25s; pointer-events: none; }
+.step-connector.done { background: var(--green-dark); }
+
+/* ── CONTENT ── */
+.content { flex: 1; max-width: 960px; margin: 0 auto; padding: 52px 40px; width: 100%; }
+.section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--teal); margin-bottom: 10px; }
+h2 { font-family: var(--font-display); font-size: 36px; font-weight: 400; color: var(--navy-text); margin-bottom: 10px; }
+.lead { font-size: 16px; color: var(--gray-400); line-height: 1.65; margin-bottom: 36px; max-width: 660px; }
+
+/* ── WELCOME ── */
+.welcome-body { flex: 1; background: var(--navy-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 40px; }
+.welcome-h1 { font-family: var(--font-display); font-size: 52px; font-weight: 400; color: white; line-height: 1.12; margin-bottom: 20px; }
+.welcome-h1 em { color: var(--green); font-style: normal; }
+.welcome-sub { font-size: 17px; color: rgba(255,255,255,0.68); max-width: 520px; line-height: 1.75; margin-bottom: 48px; }
+
+/* ── OPP DRAG CARDS ── */
+.opp-list-drag { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+.opp-card { background: white; border: 1px solid var(--gray-100); border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; transition: border-color 0.2s, box-shadow 0.2s, opacity 0.2s; user-select: none; }
+.opp-card[draggable="true"] { cursor: grab; }
+.opp-card[draggable="true"]:active { cursor: grabbing; }
+.opp-card.drag-over { border-color: var(--teal); box-shadow: 0 0 0 2px rgba(9,137,177,0.18); }
+.opp-card.dragging { opacity: 0.35; border-style: dashed; }
+.drag-handle { color: var(--gray-200); font-size: 18px; flex-shrink: 0; transition: color 0.15s; }
+.opp-card:hover .drag-handle { color: var(--gray-300); }
+.opp-num { width: 30px; height: 30px; border-radius: 50%; background: var(--navy-bg); color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.opp-info { flex: 1; }
+.opp-title { font-size: 15px; font-weight: 600; color: var(--navy-text); margin-bottom: 3px; }
+.opp-desc { font-size: 13px; color: var(--gray-400); }
+.tier-pill { padding: 4px 11px; border-radius: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0; }
+.tier-pill.qw { background: rgba(34,177,97,0.1); color: var(--green-dark); border: 1px solid rgba(34,177,97,0.25); }
+.tier-pill.cw { background: rgba(9,137,177,0.1); color: var(--teal); border: 1px solid rgba(9,137,177,0.25); }
+
+/* ── IMPORTANCE RATING ── */
+.imp-card { background: white; border: 1px solid var(--gray-100); border-radius: 10px; padding: 18px 22px; margin-bottom: 10px; display: flex; align-items: center; gap: 16px; }
+.imp-left { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
+.imp-right { display: flex; gap: 8px; flex-shrink: 0; }
+.imp-btn { padding: 7px 14px; border-radius: 6px; font-family: var(--font-primary); font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; border: 2px solid var(--gray-200); background: white; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px; }
+.imp-btn:hover { border-color: var(--navy-text); color: var(--navy-text); }
+.imp-btn.sel-h { border-color: var(--green); background: rgba(34,177,97,0.1); color: var(--green-dark); }
+.imp-btn.sel-m { border-color: var(--teal); background: rgba(9,137,177,0.1); color: var(--teal); }
+.imp-btn.sel-l { border-color: var(--gray-300); background: rgba(129,139,146,0.1); color: var(--gray-400); }
+.imp-badge { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 10px; }
+.imp-badge.h { background: rgba(34,177,97,0.12); color: var(--green-dark); }
+.imp-badge.m { background: rgba(9,137,177,0.12); color: var(--teal); }
+.imp-badge.l { background: rgba(104,108,118,0.12); color: var(--gray-400); }
+
+/* ── ENGAGEMENT PLAN TABLE ── */
+.plan-table { background: white; border: 1px solid var(--gray-100); border-radius: 14px; overflow: hidden; margin-bottom: 10px; }
+.plan-table-head {
+  display: grid; grid-template-columns: 1fr 130px 130px 120px;
+  padding: 11px 20px; background: var(--bg-default);
+  border-bottom: 1px solid var(--gray-100);
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-400);
+}
+.plan-col-right { text-align: right; }
+.plan-row {
+  display: grid; grid-template-columns: 1fr 130px 130px 120px;
+  padding: 16px 20px; border-bottom: 1px solid var(--gray-100); align-items: center;
+  transition: background 0.15s;
+}
+.plan-row:hover { background: #FAFBFC; }
+.plan-row:last-child { border-bottom: none; }
+.pr-title { font-size: 14px; font-weight: 600; color: var(--navy-text); margin-bottom: 4px; }
+.pr-sub { font-size: 12px; color: var(--gray-400); }
+.pr-badges { display: flex; gap: 5px; margin-top: 4px; align-items: center; }
+.pr-price { font-size: 15px; font-weight: 600; color: var(--navy-text); text-align: right; }
+.pr-action { text-align: right; }
+.lot-btn { font-size: 11px; font-weight: 600; padding: 5px 11px; border-radius: 6px; cursor: pointer; border: 1px solid var(--gray-200); background: white; color: var(--gray-400); font-family: var(--font-primary); transition: all 0.15s; white-space: nowrap; }
+.lot-btn:hover { border-color: var(--gray-400); color: var(--navy-text); background: var(--bg-default); }
+
+/* Total row */
+.plan-total { border-top: 2px solid var(--gray-100); padding: 20px 20px 16px; background: var(--navy-bg); border-radius: 0 0 14px 14px; }
+.plan-total-row { display: flex; justify-content: space-between; align-items: flex-end; }
+.plan-total-label { font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 6px; }
+.plan-total-amount { font-size: 38px; font-weight: 700; color: var(--green); line-height: 1; }
+.plan-total-sub { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 3px; }
+.plan-phase-note { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 14px; line-height: 1.6; max-width: 480px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); }
+.plan-services { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+.svc-tag { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 12px; background: rgba(34,177,97,0.15); color: var(--green); border: 1px solid rgba(34,177,97,0.25); }
+
+/* Parking lot */
+.parking-lot { background: white; border: 1px solid var(--gray-100); border-radius: 14px; overflow: hidden; margin-bottom: 28px; margin-top: 16px; }
+.parking-lot-head { padding: 14px 20px; background: rgba(104,108,118,0.05); border-bottom: 1px solid var(--gray-100); display: flex; align-items: center; gap: 10px; }
+.parking-lot-title { font-size: 13px; font-weight: 700; color: var(--gray-400); display: flex; align-items: center; gap: 7px; }
+.parking-lot-sub { font-size: 12px; color: var(--gray-300); }
+.lot-row {
+  display: grid; grid-template-columns: 1fr 130px 130px 120px;
+  padding: 14px 20px; border-bottom: 1px solid var(--gray-100); align-items: center; opacity: 0.75;
+}
+.lot-row:last-child { border-bottom: none; }
+.restore-btn { font-size: 11px; font-weight: 600; padding: 5px 11px; border-radius: 6px; cursor: pointer; border: 1px solid rgba(34,177,97,0.3); background: rgba(34,177,97,0.07); color: var(--green-dark); font-family: var(--font-primary); transition: all 0.15s; white-space: nowrap; }
+.restore-btn:hover { background: rgba(34,177,97,0.14); border-color: var(--green); }
+
+/* Use case ref */
+.ref-toggle-btn { background: none; border: none; cursor: pointer; font-family: var(--font-primary); font-size: 13px; font-weight: 600; color: var(--gray-400); display: flex; align-items: center; gap: 8px; padding: 0; margin-bottom: 14px; }
+.ref-toggle-btn:hover { color: var(--navy-text); }
+.ref-body { display: none; }
+.ref-body.open { display: block; }
+.ref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.ref-card { background: white; border: 1px solid var(--gray-100); border-radius: 10px; padding: 18px 20px; }
+.ref-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+.ref-title.qw { color: var(--green-dark); }
+.ref-title.cw { color: var(--teal); }
+.ref-item { font-size: 13px; color: var(--gray-400); margin-bottom: 6px; padding-left: 12px; position: relative; }
+.ref-item::before { content: '·'; position: absolute; left: 0; }
+
+/* ── DURATION ── */
+.duration-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+.dur-card { border: 2px solid var(--gray-100); border-radius: 14px; padding: 28px; cursor: pointer; transition: all 0.2s; position: relative; background: white; }
+.dur-card:hover { border-color: var(--teal); transform: translateY(-2px); }
+.dur-card.selected { background: linear-gradient(white,white) padding-box, linear-gradient(135deg,#0989B1,#22B161) border-box; border: 2px solid transparent; }
+.dur-badge { position: absolute; top: -10px; right: 18px; background: var(--green); color: white; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.dur-title { font-size: 20px; font-weight: 700; color: var(--navy-text); margin-bottom: 8px; }
+.dur-price { font-size: 30px; font-weight: 700; color: var(--green-dark); margin-bottom: 6px; }
+.dur-price span { font-size: 14px; font-weight: 400; color: var(--gray-400); }
+.dur-desc { font-size: 13px; color: var(--gray-400); line-height: 1.55; margin-bottom: 16px; }
+.dur-list { list-style: none; }
+.dur-list li { display: flex; gap: 8px; font-size: 13px; color: var(--navy-text); margin-bottom: 7px; line-height: 1.4; }
+.dur-list li::before { content: '→'; color: var(--teal); font-weight: 700; flex-shrink: 0; }
+
+/* ── SUMMARY ── */
+.summary-box { background: var(--navy-bg); border-radius: 14px; padding: 32px; color: white; margin-bottom: 20px; }
+.summary-eyebrow { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--teal); margin-bottom: 20px; }
+.summary-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 13px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.summary-row:last-child { border-bottom: none; }
+.s-label { font-size: 13px; color: rgba(255,255,255,0.5); }
+.s-value { font-size: 14px; font-weight: 600; text-align: right; max-width: 60%; }
+.s-value.green { color: var(--green); }
+.s-value.big { font-size: 22px; color: var(--green); }
+
+/* ── INFO + PAUSE ── */
+.pause-notice { background: rgba(9,137,177,0.07); border-left: 3px solid var(--teal); border-radius: 0 8px 8px 0; padding: 14px 18px; font-size: 13px; color: var(--navy-text); line-height: 1.65; margin-bottom: 24px; }
+.info-box { background: rgba(9,137,177,0.07); border-left: 3px solid var(--teal); border-radius: 0 8px 8px 0; padding: 14px 18px; font-size: 14px; color: var(--navy-text); line-height: 1.6; margin-bottom: 28px; }
+.divider { height: 1px; background: var(--gray-100); margin: 28px 0; }
+
+/* ── LOI ── */
+.loi-doc { background: white; border: 1px solid var(--gray-100); border-radius: 14px; padding: 44px; }
+.loi-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 36px; padding-bottom: 28px; border-bottom: 2px solid var(--gray-100); }
+.loi-doc-title { font-family: var(--font-display); font-size: 30px; color: var(--navy-text); margin-bottom: 4px; }
+.loi-sub { font-size: 14px; color: var(--gray-400); }
+.loi-meta { text-align: right; }
+.loi-meta-label { font-size: 11px; color: var(--gray-300); margin-bottom: 3px; }
+.loi-meta-val { font-size: 14px; font-weight: 600; color: var(--navy-text); margin-bottom: 10px; }
+.loi-section { margin-bottom: 28px; }
+.loi-sec-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--teal); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--gray-100); }
+.loi-table { width: 100%; border-collapse: collapse; }
+.loi-table td { padding: 10px 0; border-bottom: 1px solid var(--gray-100); font-size: 14px; vertical-align: top; }
+.loi-table td:first-child { color: var(--gray-400); width: 180px; }
+.loi-table td:last-child { font-weight: 500; color: var(--navy-text); }
+.loi-table tr:last-child td { border-bottom: none; }
+.loi-prose { font-size: 14px; color: var(--navy-text); line-height: 1.7; }
+.loi-prose p { margin-bottom: 10px; }
+.loi-prose ul { margin-left: 18px; margin-bottom: 10px; }
+.loi-prose li { margin-bottom: 5px; }
+.sig-area { border-top: 2px solid var(--gray-100); padding-top: 28px; margin-top: 28px; }
+.sig-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.sig-field { display: flex; flex-direction: column; gap: 5px; }
+.sig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-400); }
+.sig-input { border: none; border-bottom: 2px solid var(--gray-200); padding: 10px 0; font-family: var(--font-primary); font-size: 15px; color: var(--navy-text); background: transparent; outline: none; transition: border-color 0.2s; }
+.sig-input:focus { border-color: var(--green); }
+#sig-sig { font-family: Georgia, serif; font-size: 20px; font-style: italic; }
+
+/* ── BUTTONS ── */
+.btn-primary { background: var(--green); color: white; border: none; padding: 14px 32px; border-radius: 8px; font-family: var(--font-primary); font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn-primary:hover:not(:disabled) { background: var(--green-dark); }
+.btn-primary:disabled { background: var(--gray-200); cursor: not-allowed; color: var(--gray-300); }
+.btn-secondary { background: transparent; color: var(--navy-text); border: 2px solid var(--navy-text); padding: 12px 28px; border-radius: 8px; font-family: var(--font-primary); font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn-secondary:hover { background: var(--navy-bg); color: white; border-color: var(--navy-bg); }
+.btn-row { display: flex; gap: 12px; align-items: center; margin-top: 36px; }
+
+/* ── ADMIN ── */
+.admin-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 998; }
+.admin-overlay.open { display: block; }
+.admin-panel { position: fixed; top: 0; right: -530px; width: 510px; height: 100vh; background: white; border-left: 1px solid var(--gray-100); box-shadow: -6px 0 32px rgba(0,0,0,0.12); z-index: 999; overflow-y: auto; transition: right 0.3s ease; padding: 32px; }
+.admin-panel.open { right: 0; }
+.admin-title { font-family: var(--font-display); font-size: 26px; color: var(--navy-text); margin-bottom: 6px; }
+.admin-sub { font-size: 13px; color: var(--gray-400); margin-bottom: 24px; }
+.admin-field { margin-bottom: 18px; }
+.admin-label { font-size: 11px; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block; }
+.admin-input { width: 100%; border: 1px solid var(--gray-200); border-radius: 8px; padding: 10px 14px; font-family: var(--font-primary); font-size: 14px; color: var(--navy-text); outline: none; transition: border-color 0.2s; resize: vertical; }
+.admin-input:focus { border-color: var(--teal); }
+.opp-admin-card { background: var(--bg-default); border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+.add-opp-btn { width: 100%; padding: 12px; border: 2px dashed var(--gray-200); border-radius: 8px; cursor: pointer; background: none; font-family: var(--font-primary); font-size: 14px; color: var(--gray-400); margin-bottom: 20px; transition: all 0.2s; }
+.add-opp-btn:hover { border-color: var(--teal); color: var(--teal); }
+.admin-section-title { font-size: 15px; font-weight: 700; color: var(--navy-text); margin-bottom: 6px; }
+.admin-section-sub { font-size: 13px; color: var(--gray-400); margin-bottom: 14px; line-height: 1.5; }
+.rate-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 4px; }
+.service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px; }
+.svc-check-label { display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--navy-text); padding: 10px 13px; background: var(--bg-default); border-radius: 8px; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; }
+.svc-check-label:hover { border-color: var(--gray-200); background: white; }
+.svc-check-label input { width: 15px; height: 15px; cursor: pointer; accent-color: var(--green); flex-shrink: 0; }
+
+/* ── STEP 2 BAR ── */
+.step2-bar { background: var(--navy-bg); padding: 0 40px; flex-shrink: 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.step2-inner { max-width: 780px; margin: 0 auto; display: flex; align-items: center; padding: 14px 0; gap: 16px; }
+
+/* ── CONFIRMATION ── */
+.confirm-body { flex: 1; background: var(--navy-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 40px; }
+.confirm-check { width: 80px; height: 80px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-size: 36px; color: white; margin-bottom: 32px; }
+
+@media (max-width: 780px) {
+  .plan-table-head, .plan-row, .lot-row { grid-template-columns: 1fr auto auto; }
+  .plan-table-head > *:nth-child(2), .plan-row > *:nth-child(2), .lot-row > *:nth-child(2) { display: none; }
+}
+@media (max-width: 680px) {
+  .duration-grid, .sig-grid, .ref-grid, .rate-grid, .service-grid { grid-template-columns: 1fr; }
+  .nav { padding: 16px 20px; }
+  .content { padding: 32px 20px; }
+  h2 { font-size: 28px; }
+  .welcome-h1 { font-size: 36px; }
+  .loi-doc { padding: 24px; }
+  .loi-top { flex-direction: column; gap: 16px; }
+  .loi-meta { text-align: left; }
+  .imp-right { flex-wrap: wrap; }
+  #progress-bar-global { padding: 0 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- CHROME BANNER -->
+<div id="chrome-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:#FFF3CD;border-bottom:2px solid #F59E0B;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:'Barlow',system-ui,sans-serif;font-size:13px;color:#92400E;">
+  <span>⚠ This experience is optimized for <strong>Google Chrome</strong>. You appear to be using a different browser — some features may not display correctly.</span>
+  <div style="display:flex;gap:10px;flex-shrink:0;">
+    <a href="#" onclick="openInChrome(event)" style="background:#F59E0B;color:white;padding:6px 14px;border-radius:6px;font-weight:600;text-decoration:none;font-size:12px;">How to open in Chrome</a>
+    <button onclick="document.getElementById('chrome-banner').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:18px;color:#92400E;line-height:1;">✕</button>
+  </div>
+</div>
+<div id="chrome-howto" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:10000;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:14px;padding:36px;max-width:440px;width:90%;font-family:'Barlow',system-ui,sans-serif;">
+    <div style="font-size:22px;font-weight:700;color:#0E1E2B;margin-bottom:8px;">Open in Chrome</div>
+    <div style="font-size:14px;color:#686C76;line-height:1.7;margin-bottom:20px;">Copy the address from your browser's address bar and paste it into Google Chrome, or right-click the file and choose <em>"Open with → Google Chrome"</em>.</div>
+    <div style="background:#F1F3F5;border-radius:8px;padding:12px 16px;font-size:12px;color:#686C76;margin-bottom:20px;word-break:break-all;" id="current-url"></div>
+    <div style="display:flex;gap:10px;">
+      <button onclick="navigator.clipboard&&navigator.clipboard.writeText(location.href);this.textContent='Copied!'" style="background:#22B161;color:white;border:none;padding:10px 20px;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;flex:1;">Copy URL</button>
+      <button onclick="document.getElementById('chrome-howto').style.display='none'" style="background:none;border:2px solid #C2C8CC;padding:10px 20px;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;color:#0E1E2B;">Close</button>
+    </div>
+  </div>
+</div>
+<script>
+(function detectBrowser(){
+  const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+  if (!isChrome) {
+    document.getElementById('chrome-banner').style.display = 'flex';
+    document.getElementById('current-url').textContent = location.href;
+    document.body.style.paddingTop = '48px';
+  }
+})();
+function openInChrome(e) {
+  e.preventDefault();
+  const d = document.getElementById('chrome-howto');
+  d.style.display = 'flex';
+}
+</script>
+
+<!-- LEAD LINK MODAL -->
+<div id="lead-link-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:10001;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:14px;padding:36px;max-width:520px;width:90%;font-family:'Barlow',system-ui,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#0989B1;margin-bottom:10px;">Share With Lead</div>
+    <div style="font-size:22px;font-weight:700;color:#0E1E2B;margin-bottom:8px;">Lead Link Ready</div>
+    <div style="font-size:14px;color:#686C76;line-height:1.65;margin-bottom:16px;">Send this to <strong id="lead-link-company">your lead</strong>. They'll see a pre-configured proposal with their wins — no admin panel. Works in any browser.</div>
+    <input id="lead-link-url" readonly style="width:100%;border:1px solid #C2C8CC;border-radius:8px;padding:10px 14px;font-family:monospace;font-size:11px;color:#0E1E2B;background:#F1F3F5;margin-bottom:12px;cursor:text;" onclick="this.select()">
+    <div style="display:flex;gap:10px;margin-bottom:14px;">
+      <button id="copy-lead-btn" onclick="copyLeadLink()" style="background:#22B161;color:white;border:none;padding:11px 20px;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;flex:1;transition:background 0.15s;">Copy Link</button>
+      <button onclick="document.getElementById('lead-link-modal').style.display='none'" style="background:none;border:2px solid #C2C8CC;padding:11px 20px;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;color:#0E1E2B;">Close</button>
+    </div>
+    <div id="lead-link-file-warning" style="display:none;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400E;margin-bottom:12px;">⚠ This file is running locally. The link above won't work until the tool is hosted at a URL. Copy and save the link now — it will be valid once you upload the file to GitHub Pages or similar hosting.</div>
+    <div style="font-size:12px;color:#818B92;line-height:1.5;">Each lead gets a unique URL encoding their specific proposal. When they submit the LOI, their rep receives an email notification. Generate a new link any time you update the setup.</div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin-overlay" id="adminOverlay" onclick="toggleAdmin()"></div>
+<div class="admin-panel" id="adminPanel">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
+    <div><div class="admin-title">Configure Proposal</div><div class="admin-sub">Set up the lead's details and Rumble findings</div></div>
+    <button onclick="toggleAdmin()" style="background:none;border:none;cursor:pointer;font-size:22px;color:var(--gray-400);padding:4px;">✕</button>
+  </div>
+  <div style="height:1px;background:var(--gray-100);margin:18px 0;"></div>
+
+  <!-- Contact info -->
+  <div class="admin-field"><label class="admin-label">Company Name</label><input class="admin-input" id="cfg-company" placeholder="Acme Corporation"></div>
+  <div class="admin-field"><label class="admin-label">Decision Maker's Name</label><input class="admin-input" id="cfg-contact" placeholder="Jane Smith, CEO"></div>
+  <div class="admin-field"><label class="admin-label">Prepared By (Augusto)</label><input class="admin-input" id="cfg-preparedby" value="Lawrence McGlown"></div>
+  <div class="admin-field"><label class="admin-label">Rep Email (LOI notification)</label><input class="admin-input" id="cfg-rep-email" type="email" value="lmcglown@augustodigital.com"></div>
+
+  <div style="height:1px;background:var(--gray-100);margin:18px 0;"></div>
+
+  <!-- Billing rates -->
+  <div class="admin-section-title">Billing Rates</div>
+  <div class="admin-section-sub">Set the per-win, per-quarter rate for each engagement type. Total scales with the number of active wins.</div>
+  <div class="rate-grid">
+    <div class="admin-field" style="margin-bottom:0;">
+      <label class="admin-label">Quick Win Rate / qtr</label>
+      <input class="admin-input" id="cfg-qw-rate" type="number" value="25000" min="0" step="1000">
+    </div>
+    <div class="admin-field" style="margin-bottom:0;">
+      <label class="admin-label">Comprehensive Win Rate / qtr</label>
+      <input class="admin-input" id="cfg-cw-rate" type="number" value="100000" min="0" step="5000">
+    </div>
+  </div>
+
+  <div style="height:1px;background:var(--gray-100);margin:18px 0;"></div>
+
+  <!-- M&E Bundle -->
+  <div class="admin-section-title">Maintenance &amp; Evolution Bundle</div>
+  <div class="admin-section-sub">Optional add-on billed semi-annually. Toggle to include in this proposal.</div>
+  <label class="svc-check-label" style="margin-bottom:14px;"><input type="checkbox" id="svc-me" checked> Include M&amp;E Bundle in this proposal</label>
+  <div class="rate-grid">
+    <div class="admin-field" style="margin-bottom:0;">
+      <label class="admin-label">QW M&amp;E Rate (per 6 months)</label>
+      <input class="admin-input" id="cfg-qw-me-rate" type="number" value="30000" min="0" step="1000">
+    </div>
+    <div class="admin-field" style="margin-bottom:0;">
+      <label class="admin-label">CW M&amp;E Rate (per 6 months)</label>
+      <input class="admin-input" id="cfg-cw-me-rate" type="number" value="60000" min="0" step="5000">
+    </div>
+  </div>
+
+  <div style="height:1px;background:var(--gray-100);margin:18px 0;"></div>
+
+  <!-- Opportunities -->
+  <div class="admin-section-title">Rumble Opportunities</div>
+  <div class="admin-section-sub">Add opportunities in priority order. Classify each as Quick Win or Comprehensive Win.</div>
+  <div id="opp-list"></div>
+  <button class="add-opp-btn" onclick="addOppField()">+ Add Opportunity</button>
+
+  <div style="height:1px;background:var(--gray-100);margin:18px 0;"></div>
+
+  <!-- Use case library -->
+  <div class="admin-section-title">Use Case Library</div>
+  <div class="admin-section-sub">Reference examples shown at the bottom of the engagement plan.</div>
+  <div class="admin-field"><label class="admin-label">Quick Win Examples (one per line)</label><textarea class="admin-input" id="cfg-qw-usecases" rows="4" placeholder="Process automation&#10;Data extraction & reporting&#10;AI-assisted communications"></textarea></div>
+  <div class="admin-field"><label class="admin-label">Comprehensive Win Examples (one per line)</label><textarea class="admin-input" id="cfg-cw-usecases" rows="4" placeholder="End-to-end workflow transformation&#10;Multi-system AI integration&#10;Custom AI model development"></textarea></div>
+
+  <button class="btn-primary" onclick="applyConfig()" style="width:100%;margin-top:8px;">Apply & Preview →</button>
+  <button onclick="generateLeadLink()" style="width:100%;margin-top:10px;padding:12px 20px;border:2px solid var(--teal);border-radius:8px;cursor:pointer;font-family:var(--font-primary);font-size:14px;font-weight:600;color:var(--teal);background:rgba(9,137,177,0.07);transition:all 0.2s;" onmouseover="this.style.background='rgba(9,137,177,0.14)'" onmouseout="this.style.background='rgba(9,137,177,0.07)'">🔗 Generate Lead Link</button>
+</div>
+
+<!-- GLOBAL PROGRESS BAR -->
+<div id="progress-bar-global">
+  <div class="progress-inner" id="progress-inner-global"></div>
+</div>
+
+<!-- ═══ S1: WELCOME ═══ -->
+<div class="screen active" id="screen-1">
+  <div class="nav">
+    <div class="nav-wordmark"><svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,26 2,26" fill="#22B161"/></svg>Augusto Digital</div>
+    <button onclick="toggleAdmin()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.8);padding:8px 16px;border-radius:6px;cursor:pointer;font-family:var(--font-primary);font-size:13px;font-weight:500;">⚙ Augusto Setup</button>
+  </div>
+  <div class="welcome-body">
+    <h1 class="welcome-h1">Welcome, <em id="welcome-company">your company</em></h1>
+    <p class="welcome-sub">Your Rumble revealed ways to put AI to work for your people. Click below to build an engagement plan that aligns with your priorities.</p>
+    <button class="btn-primary" onclick="goTo(2)" style="font-size:17px;padding:18px 52px;">Define Your Plan →</button>
+    <div style="margin-top:20px;font-size:13px;color:rgba(255,255,255,0.3);">About 5 minutes</div>
+  </div>
+</div>
+
+<!-- ═══ S2: PRIORITIZE ═══ -->
+<div class="screen" id="screen-2">
+  <div class="nav"><div class="nav-wordmark"><svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,26 2,26" fill="#22B161"/></svg>Augusto Digital</div></div>
+  <div class="content fade-in">
+    <div class="section-label">Step 1 of 2 · Alignment</div>
+    <h2>Prioritize your Scale of Win options</h2>
+    <p class="lead">Click and drag the wins based on your priorities. This will be used as the foundation for defining the scope of the service engagement.</p>
+    <div class="opp-list-drag" id="opp-drag-list"></div>
+    <div class="info-box"><strong>How we categorize:</strong> Quick Wins are targeted activations deployable within one quarter. Comprehensive Wins are integrated systems that fundamentally change how your business operates.</div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goTo(1)">← Back</button>
+      <button class="btn-primary" onclick="goTo(3)">Confirm priorities →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S3: TIMING ═══ -->
+<div class="screen" id="screen-3">
+  <div class="nav"><div class="nav-wordmark"><svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,26 2,26" fill="#22B161"/></svg>Augusto Digital</div></div>
+  <div class="content fade-in">
+    <div class="section-label">Step 1 of 2 · Alignment</div>
+    <h2>When do you want to execute each win?</h2>
+    <p class="lead">Set the implementation timing for each opportunity. This structures your engagement plan and determines what's activated — and billed — at each phase.</p>
+    <div style="display:flex;gap:24px;margin-bottom:24px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--gray-400);"><div style="width:10px;height:10px;border-radius:50%;background:var(--green);flex-shrink:0;"></div><strong style="color:var(--navy-text);">Now</strong> — Immediate activation</div>
+      <div style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--gray-400);"><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);flex-shrink:0;"></div><strong style="color:var(--navy-text);">Next</strong> — On deck after Now completes</div>
+      <div style="display:flex;align-items:center;gap:7px;font-size:13px;color:var(--gray-400);"><div style="width:10px;height:10px;border-radius:50%;background:var(--gray-300);flex-shrink:0;"></div><strong style="color:var(--navy-text);">Later</strong> — Reserved for a future phase</div>
+    </div>
+    <div id="timing-list"></div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goTo(2)">← Back</button>
+      <button class="btn-primary" id="btn-timing-next" onclick="goTo(4)" disabled>Build my engagement plan →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S4: ENGAGEMENT PLAN ═══ -->
+<div class="screen" id="screen-4">
+  <div class="nav"><div class="nav-wordmark"><svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,26 2,26" fill="#22B161"/></svg>Augusto Digital</div></div>
+  <div class="content fade-in" id="plan-content">
+    <!-- rendered by renderEngagementPlan() -->
+  </div>
+</div>
+
+<!-- ═══ S5: STRUCTURE ═══ -->
+<div class="screen" id="screen-5">
+  <div class="nav"><div class="nav-wordmark"><svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,26 2,26" fill="#22B161"/></svg>Augusto Digital</div></div>
+  <div class="content fade-in">
+    <div class="section-label">Step 1 of 2 · Alignment</div>
+    <h2>Your engagement structure</h2>
+    <p class="lead" id="s5-lead">Your Now wins activate immediately upon approval. Review the engagement term and choose how you'd like to be invoiced.</p>
+    <div class="duration-grid" id="duration-grid"></div>
+    <div id="evo-note"></div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goTo(4)">← Back</button>
+      <button class="btn-primary" id="btn-dur-next" onclick="goTo(6)" disabled>Review your summary →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S6: SUMMARY ═══ -->
+<div class="screen" id="screen-6">
+  <div class="nav"><div class="nav-wordmark"><svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,26 2,26" fill="#22B161"/></svg>Augusto Digital</div></div>
+  <div class="content fade-in">
+    <div class="section-label">Step 1 Complete · Your Selection</div>
+    <h2>Here's what you've chosen</h2>
+    <p class="lead">Review before moving to the Letter of Intent. Go back to adjust anything.</p>
+    <div class="summary-box" id="summary-box"></div>
+    <div class="pause-notice"><strong>Fixed-term engagement:</strong> This is a defined engagement with a clear end date — not an open-ended subscription. Either party may terminate with 30 days written notice prior to the start of any remaining quarter.</div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goTo(5)">← Adjust</button>
+      <button class="btn-primary" onclick="goTo(7)" style="font-size:17px;padding:16px 40px;">Proceed to Letter of Intent →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S7: LOI ═══ -->
+<div class="screen" id="screen-7">
+  <div class="nav"><div class="nav-wordmark"><svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,26 2,26" fill="#22B161"/></svg>Augusto Digital</div></div>
+  <div class="step2-bar">
+    <div class="step2-inner">
+      <div style="font-size:13px;font-weight:600;color:white;white-space:nowrap;">Step 2 of 2</div>
+      <div style="flex:1;height:3px;background:rgba(255,255,255,0.15);border-radius:2px;overflow:hidden;"><div style="height:100%;width:100%;background:var(--green);border-radius:2px;"></div></div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.5);white-space:nowrap;">Letter of Intent</div>
+    </div>
+  </div>
+  <div class="content fade-in" style="max-width:780px;">
+    <div class="section-label">Step 2 of 2 · Commitment</div>
+    <h2>Letter of Intent</h2>
+    <p class="lead">This confirms your intent to engage with Augusto Digital. Sign below and your team will follow up within one business day to activate the engagement and send the formal agreement.</p>
+    <div class="loi-doc">
+      <div class="loi-top">
+        <div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--teal);margin-bottom:8px;">Letter of Intent</div>
+          <div class="loi-doc-title">Engagement Agreement</div>
+          <div class="loi-sub">Augusto Digital × <span id="loi-co"></span></div>
+        </div>
+        <div class="loi-meta">
+          <div class="loi-meta-label">Date Prepared</div><div class="loi-meta-val" id="loi-date"></div>
+          <div class="loi-meta-label">Prepared by</div><div class="loi-meta-val" id="loi-by"></div>
+        </div>
+      </div>
+      <div class="loi-section"><div class="loi-sec-label">Engagement Overview</div><table class="loi-table" id="loi-overview"></table></div>
+      <div class="loi-section"><div class="loi-sec-label">Scope & Deliverables</div><div class="loi-prose" id="loi-scope"></div></div>
+      <div class="loi-section"><div class="loi-sec-label">Investment</div><table class="loi-table" id="loi-investment"></table></div>
+      <div class="pause-notice"><strong>Fixed-term engagement:</strong> This engagement concludes at the end of the agreed term. It does not renew automatically. Either party may terminate with 30 days written notice prior to the start of any remaining quarter.</div>
+      <div class="loi-prose"><p>By signing below, <strong id="loi-co-2"></strong> expresses its intent to engage Augusto Digital under the terms described above. This letter of intent is non-binding but signals mutual commitment to proceed. A formal Statement of Work and Services Agreement will be issued prior to engagement activation.</p></div>
+      <div class="sig-area">
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--gray-400);margin-bottom:20px;">Authorized by <span id="loi-co-3"></span></div>
+        <div class="sig-grid">
+          <div class="sig-field"><label class="sig-label">Signature</label><input class="sig-input" id="sig-sig" placeholder="Sign your name" oninput="checkSig()"></div>
+          <div class="sig-field"><label class="sig-label">Printed Name</label><input class="sig-input" id="sig-name" placeholder="Full name" oninput="checkSig()"></div>
+          <div class="sig-field"><label class="sig-label">Title</label><input class="sig-input" id="sig-title" placeholder="CEO, VP Operations, etc." oninput="checkSig()"></div>
+          <div class="sig-field"><label class="sig-label">Date</label><input class="sig-input" id="sig-date" type="date" oninput="checkSig()"></div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row" style="justify-content:space-between;">
+      <button class="btn-secondary" onclick="goTo(6)">← Back</button>
+      <button class="btn-primary" id="btn-submit" onclick="submitLOI()" disabled style="font-size:16px;padding:16px 40px;">Submit Letter of Intent ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S8: CONFIRMATION ═══ -->
+<div class="screen" id="screen-8">
+  <div class="nav"><div class="nav-wordmark"><svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,26 2,26" fill="#22B161"/></svg>Augusto Digital</div></div>
+  <div class="confirm-body">
+    <div class="confirm-check">✓</div>
+    <h2 style="font-family:var(--font-display);font-size:46px;font-weight:400;color:white;margin-bottom:14px;">You're in.</h2>
+    <p style="font-size:17px;color:rgba(255,255,255,0.65);max-width:500px;line-height:1.7;margin-bottom:36px;">Your Letter of Intent has been received. Your Augusto team will follow up within one business day to activate your engagement and send the formal agreement.</p>
+    <div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:24px 40px;margin-bottom:32px;">
+      <div style="font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:6px;">Engagement confirmed for</div>
+      <div style="font-size:22px;font-weight:700;color:var(--green);" id="confirm-summary"></div>
+    </div>
+    <div style="font-size:13px;color:rgba(255,255,255,0.35);">Questions? Reach out to your Augusto team directly.</div>
+  </div>
+</div>
+
+<script>
+// ─── STATE ─────────────────────────────────────────────────
+const S = {
+  company: 'your company', contact: '', preparedBy: 'Lawrence McGlown', repEmail: 'lmcglown@augustodigital.com',
+  opps: [],   // { title, desc, tier:'QW'|'CW', timing:null|'now'|'next'|'later', cwQtrs:2 }
+  qwUC: [], cwUC: [],
+  qwRate: 25000, cwRate: 100000,
+  qwMERate: 30000,   // per 6-month period per QW
+  cwMERate: 60000,   // per 6-month period per CW
+  meEnabled: true,
+  paySchedule: null, // null | 'quarterly' | 'upfront'
+};
+const UPFRONT_DISCOUNT = 0.10;
+let dragSrc = null, oppCount = 0, oppIds = [], isLeadMode = false;
+
+// ─── HELPERS ───────────────────────────────────────────────
+function winQtrs(o)      { return o.tier === 'CW' ? (o.cwQtrs || 2) : 1; }
+function winQtrRate(o)   { return o.tier === 'QW' ? S.qwRate : S.cwRate; }
+function winBaseTotal(o) { return winQtrRate(o) * winQtrs(o); }
+function mePeriodRate(o) { return o.tier === 'QW' ? S.qwMERate : S.cwMERate; }
+function winMETotal(o)   { return S.meEnabled ? mePeriodRate(o) : 0; }
+function getByTiming(t)         { return S.opps.filter(o => o.timing === t); }
+function getTotalByTiming(t)    { return getByTiming(t).reduce((s,o) => s + winQtrRate(o), 0); }
+function getNowBaseTotal()      { return getByTiming('now').reduce((s,o) => s + winBaseTotal(o), 0); }
+function getNowMETotal()        { return getByTiming('now').reduce((s,o) => s + winMETotal(o), 0); }
+function getNowGrandTotal()     { return getNowBaseTotal() + getNowMETotal(); }
+function fmt(n) { return '$' + n.toLocaleString(); }
+
+// ─── PROGRESS BAR ──────────────────────────────────────────
+const STEPS = [
+  { label: 'Welcome',         screen: 1 },
+  { label: 'Prioritize',      screen: 2 },
+  { label: 'Timing',          screen: 3 },
+  { label: 'Engagement Plan', screen: 4 },
+  { label: 'Structure',       screen: 5 },
+  { label: 'Confirm',         screen: 6 },
+];
+
+function renderProgressBar(cur) {
+  const bar = document.getElementById('progress-bar-global');
+  if (cur === 1 || cur >= 7) { bar.style.display = 'none'; return; }
+  bar.style.display = 'block';
+  const inner = document.getElementById('progress-inner-global');
+  inner.innerHTML = STEPS.map((step, i) => {
+    const status = step.screen < cur ? 'done' : step.screen === cur ? 'active' : '';
+    const dot = status === 'done' ? '✓' : step.screen;
+    const connector = i < STEPS.length - 1
+      ? `<div class="step-connector ${step.screen < cur ? 'done' : ''}"></div>` : '';
+    return `
+      <div class="progress-step" onclick="goTo(${step.screen})">
+        <div class="step-dot ${status}">${dot}</div>
+        <span class="step-label ${status}">${step.label}</span>
+      </div>${connector}`;
+  }).join('');
+}
+
+// ─── NAVIGATION ────────────────────────────────────────────
+function goTo(n) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(`screen-${n}`).classList.add('active');
+  window.scrollTo(0, 0);
+  renderProgressBar(n);
+  if (n === 3) renderTimingList();
+  if (n === 4) renderEngagementPlan();
+  if (n === 5) renderPaymentSchedule();
+  if (n === 6) renderSummary();
+  if (n === 7) renderLOI();
+}
+
+// ─── ADMIN ─────────────────────────────────────────────────
+function toggleAdmin() {
+  document.getElementById('adminPanel').classList.toggle('open');
+  document.getElementById('adminOverlay').classList.toggle('open');
+}
+
+const FUNC_OPTIONS = ['Company','Finance','HR','IT','Marketing','Operations','Sales','Security'];
+
+function addOppField(pre = null) {
+  oppCount++;
+  const id = `opp-${oppCount}`;
+  oppIds.push(id);
+  const isCW  = pre && pre.tier === 'CW';
+  const func  = pre && pre.func ? pre.func : 'Company';
+  const div = document.createElement('div');
+  div.className = 'opp-admin-card'; div.id = id;
+  div.dataset.selectedTier = isCW ? 'CW' : 'QW';
+  div.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <span style="font-size:12px;font-weight:700;color:var(--gray-400);">Opportunity ${oppIds.length}</span>
+      <button onclick="removeOpp('${id}')" style="background:none;border:none;cursor:pointer;color:var(--gray-300);font-size:17px;">✕</button>
+    </div>
+    <div class="admin-field" style="margin-bottom:10px;">
+      <label class="admin-label">Title</label>
+      <input class="admin-input opp-title-input" placeholder="e.g. AI-powered lead scoring" value="${pre ? pre.title : ''}">
+    </div>
+    <div class="admin-field" style="margin-bottom:12px;">
+      <label class="admin-label">Description (optional)</label>
+      <input class="admin-input opp-desc-input" placeholder="Brief context" value="${pre && pre.desc ? pre.desc : ''}">
+    </div>
+    <div class="admin-field" style="margin-bottom:12px;">
+      <label class="admin-label">Business Function</label>
+      <select class="admin-input opp-func-input" style="cursor:pointer;">
+        ${FUNC_OPTIONS.map(f => `<option value="${f}"${f===func?' selected':''}>${f === 'Company' ? 'Company-wide' : f}</option>`).join('')}
+      </select>
+    </div>
+    <div>
+      <label class="admin-label" style="margin-bottom:8px;">Engagement Type</label>
+      <div style="display:flex;gap:8px;">
+        <button class="tier-toggle" data-tier="QW" onclick="pickTier(this)" style="flex:1;padding:9px;border-radius:6px;cursor:pointer;font-family:var(--font-primary);font-size:13px;font-weight:600;transition:all 0.15s;${!isCW?'border:2px solid var(--green);background:rgba(34,177,97,0.1);color:var(--green-dark)':'border:2px solid var(--gray-200);background:white;color:var(--gray-400)'}">Quick Win</button>
+        <button class="tier-toggle" data-tier="CW" onclick="pickTier(this)" style="flex:1;padding:9px;border-radius:6px;cursor:pointer;font-family:var(--font-primary);font-size:13px;font-weight:600;transition:all 0.15s;${isCW?'border:2px solid var(--teal);background:rgba(9,137,177,0.1);color:var(--teal)':'border:2px solid var(--gray-200);background:white;color:var(--gray-400)'}">Comprehensive Win</button>
+      </div>
+    </div>
+    <div class="admin-field cw-qtrs-field" style="margin-top:12px;margin-bottom:0;${!isCW?'display:none':''}">
+      <label class="admin-label">Estimated Quarters (min. 2)</label>
+      <input class="admin-input opp-cwqtrs-input" type="number" value="${pre && pre.cwQtrs ? pre.cwQtrs : 2}" min="2" max="16" step="1" placeholder="2">
+      <div style="font-size:11px;color:var(--gray-300);margin-top:4px;">Default: 2 quarters. Drives proposal investment total.</div>
+    </div>`;
+  document.getElementById('opp-list').appendChild(div);
+}
+
+function removeOpp(id) { document.getElementById(id).remove(); oppIds = oppIds.filter(x => x !== id); }
+
+function pickTier(btn) {
+  const card = btn.closest('.opp-admin-card');
+  card.querySelectorAll('.tier-toggle').forEach(b => {
+    b.style.border = '2px solid var(--gray-200)'; b.style.background = 'white'; b.style.color = 'var(--gray-400)';
+  });
+  if (btn.dataset.tier === 'QW') {
+    btn.style.border = '2px solid var(--green)'; btn.style.background = 'rgba(34,177,97,0.1)'; btn.style.color = 'var(--green-dark)';
+  } else {
+    btn.style.border = '2px solid var(--teal)'; btn.style.background = 'rgba(9,137,177,0.1)'; btn.style.color = 'var(--teal)';
+  }
+  card.dataset.selectedTier = btn.dataset.tier;
+  const qtrsField = card.querySelector('.cw-qtrs-field');
+  if (qtrsField) qtrsField.style.display = btn.dataset.tier === 'CW' ? 'block' : 'none';
+}
+
+function applyConfig() {
+  S.company = document.getElementById('cfg-company').value.trim() || 'your company';
+  S.contact = document.getElementById('cfg-contact').value.trim();
+  S.preparedBy = document.getElementById('cfg-preparedby').value.trim() || 'Lawrence McGlown';
+  S.repEmail = document.getElementById('cfg-rep-email').value.trim() || 'lmcglown@augustodigital.com';
+  S.qwRate = parseInt(document.getElementById('cfg-qw-rate').value) || 25000;
+  S.cwRate = parseInt(document.getElementById('cfg-cw-rate').value) || 100000;
+  S.meEnabled = document.getElementById('svc-me').checked;
+  S.qwMERate = parseInt(document.getElementById('cfg-qw-me-rate').value) || 30000;
+  S.cwMERate = parseInt(document.getElementById('cfg-cw-me-rate').value) || 60000;
+  S.opps = [];
+  document.querySelectorAll('#opp-list .opp-admin-card').forEach(card => {
+    const title = card.querySelector('.opp-title-input').value.trim();
+    if (!title) return;
+    const desc   = card.querySelector('.opp-desc-input').value.trim();
+    const tier   = card.dataset.selectedTier || 'QW';
+    const cwQtrs = Math.max(2, parseInt(card.querySelector('.opp-cwqtrs-input').value) || 2);
+    const func   = card.querySelector('.opp-func-input').value || 'Company';
+    S.opps.push({ title, desc, tier, timing: null, cwQtrs, func });
+  });
+  const qwRaw = document.getElementById('cfg-qw-usecases').value;
+  S.qwUC = qwRaw ? qwRaw.split('\n').map(l => l.trim()).filter(Boolean) : [];
+  const cwRaw = document.getElementById('cfg-cw-usecases').value;
+  S.cwUC = cwRaw ? cwRaw.split('\n').map(l => l.trim()).filter(Boolean) : [];
+  toggleAdmin();
+  document.getElementById('welcome-company').textContent = S.company;
+  renderDragList(); renderTimingList(); renderPaymentSchedule();
+  goTo(1);
+}
+
+// ─── SCREEN 2: DRAG + PRIORITIZE ───────────────────────────
+function renderDragList() {
+  const opps = S.opps.length ? S.opps : [{ title:'Configure opportunities in Augusto Setup', desc:'Click ⚙ to add Rumble findings', tier:'QW', importance:null, inScope:true }];
+  const list = document.getElementById('opp-drag-list');
+  list.innerHTML = '';
+  opps.forEach((o, i) => {
+    const card = document.createElement('div');
+    card.className = 'opp-card'; card.draggable = true; card.dataset.idx = i;
+    card.innerHTML = `
+      <div class="drag-handle" title="Drag to reorder">⠿</div>
+      <div class="opp-num">${i+1}</div>
+      <div class="opp-info"><div class="opp-title">${o.title}</div>${o.desc?`<div class="opp-desc">${o.desc}</div>`:''}</div>
+      <span class="tier-pill ${o.tier.toLowerCase()}">${o.tier==='QW'?'Quick Win':'Comprehensive Win'}</span>`;
+    card.addEventListener('dragstart', e => { dragSrc = i; card.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; });
+    card.addEventListener('dragend', () => { card.classList.remove('dragging'); list.querySelectorAll('.opp-card').forEach(c => c.classList.remove('drag-over')); });
+    card.addEventListener('dragover', e => { e.preventDefault(); list.querySelectorAll('.opp-card').forEach(c => c.classList.remove('drag-over')); card.classList.add('drag-over'); });
+    card.addEventListener('drop', e => {
+      e.preventDefault();
+      const ti = parseInt(card.dataset.idx);
+      if (dragSrc === null || dragSrc === ti) return;
+      const moved = S.opps.splice(dragSrc, 1)[0];
+      S.opps.splice(ti, 0, moved);
+      renderDragList(); renderTimingList();
+    });
+    list.appendChild(card);
+  });
+}
+
+// ─── SCREEN 3: TIMING ──────────────────────────────────────
+function renderTimingList() {
+  const list = document.getElementById('timing-list');
+  list.innerHTML = '';
+  if (!S.opps.length) { list.innerHTML = '<div class="info-box">No opportunities configured. Use Augusto Setup to add Rumble findings.</div>'; return; }
+  S.opps.forEach((o, i) => {
+    const card = document.createElement('div');
+    card.className = 'imp-card'; card.id = `tc-${i}`;
+    card.innerHTML = `
+      <div class="imp-left">
+        <div class="opp-num">${i+1}</div>
+        <div class="opp-info"><div class="opp-title">${o.title}</div>${o.desc?`<div class="opp-desc">${o.desc}</div>`:''}</div>
+        <span class="tier-pill ${o.tier.toLowerCase()}" style="flex-shrink:0;">${o.tier==='QW'?'Quick Win':'Comprehensive Win'}</span>
+      </div>
+      <div class="imp-right">
+        <button class="imp-btn${o.timing==='now'?' sel-h':''}" onclick="setTiming(${i},'now')">Now</button>
+        <button class="imp-btn${o.timing==='next'?' sel-m':''}" onclick="setTiming(${i},'next')">Next</button>
+        <button class="imp-btn${o.timing==='later'?' sel-l':''}" onclick="setTiming(${i},'later')">Later</button>
+      </div>`;
+    list.appendChild(card);
+  });
+  checkAllTimed();
+}
+
+function setTiming(idx, t) {
+  S.opps[idx].timing = t;
+  const card = document.getElementById(`tc-${idx}`);
+  card.querySelectorAll('.imp-btn').forEach(b => b.classList.remove('sel-h','sel-m','sel-l'));
+  const btns = card.querySelectorAll('.imp-btn');
+  const map = { now:[0,'sel-h'], next:[1,'sel-m'], later:[2,'sel-l'] };
+  btns[map[t][0]].classList.add(map[t][1]);
+  checkAllTimed();
+}
+
+function checkAllTimed() {
+  const ok = S.opps.length > 0 && S.opps.every(o => o.timing !== null);
+  document.getElementById('btn-timing-next').disabled = !ok;
+}
+
+// ─── SCREEN 4: ENGAGEMENT PLAN ─────────────────────────────
+function renderEngagementPlan() {
+  const nowWins   = getByTiming('now');
+  const nextWins  = getByTiming('next');
+  const laterWins = getByTiming('later');
+
+  function winRows(wins) {
+    if (!wins.length) return `<div style="padding:20px;text-align:center;color:var(--gray-400);font-size:14px;">No wins assigned to this phase.</div>`;
+    return wins.map(o => {
+      const qtrs = winQtrs(o);
+      const rate = winQtrRate(o);
+      const base = winBaseTotal(o);
+      const durationTag = o.tier === 'QW'
+        ? `<span style="font-size:11px;color:var(--green-dark);font-weight:500;margin-left:8px;">1 quarter</span>`
+        : `<span style="font-size:11px;color:var(--teal);font-weight:500;margin-left:8px;">~${qtrs} quarters</span>`;
+      const meStart = winQtrs(o) + 1;
+      const meRow = S.meEnabled ? `
+        <div style="padding:9px 20px 9px 20px;background:rgba(9,137,177,0.04);border-top:1px dashed var(--gray-100);display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:12px;color:var(--teal);padding-left:2px;">+ M&amp;E Bundle <span style="color:var(--gray-300)">(begins Q${meStart} · semi-annual)</span></div>
+          <div style="font-size:12px;font-weight:700;color:var(--teal);padding-right:2px;">${fmt(winMETotal(o))}<span style="font-size:10px;font-weight:400;">/6 mo</span></div>
+        </div>` : '';
+      return `
+        <div class="plan-row" style="grid-template-columns:1fr 110px 120px;">
+          <div>
+            <div class="pr-title">${o.title}${durationTag}</div>
+            ${o.desc ? `<div class="pr-sub">${o.desc}</div>` : ''}
+            <div class="pr-badges"><span class="tier-pill ${o.tier.toLowerCase()}">${o.tier==='QW'?'Quick Win':'Comprehensive Win'}</span>${o.func && o.func !== 'Company' ? `<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(104,108,118,0.08);color:var(--gray-400);border:1px solid var(--gray-100);">${o.func}</span>` : ''}</div>
+          </div>
+          <div class="pr-price">${fmt(rate)}<span style="font-size:11px;font-weight:400;color:var(--gray-400)">/qtr</span></div>
+          <div class="pr-price">${fmt(base)}</div>
+        </div>${meRow}`;
+    }).join('');
+  }
+
+  function bucketSection(label, cls, desc, wins, bgStyle) {
+    if (!wins.length) return '';
+    const base = wins.reduce((s,o) => s + winBaseTotal(o), 0);
+    const me   = wins.reduce((s,o) => s + winMETotal(o), 0);
+    const meFooter = S.meEnabled && me > 0 ? `
+      <div style="display:flex;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.15);">
+        <div style="font-size:12px;color:rgba(255,255,255,0.55);">M&amp;E Bundle (semi-annual)</div>
+        <div style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.8);">${fmt(me)}/6 mo</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:2px solid rgba(255,255,255,0.2);">
+        <div style="font-size:12px;color:rgba(255,255,255,0.45);">Total investment (incl. M&amp;E)</div>
+        <div style="font-size:22px;font-weight:700;color:white;">${fmt(base + me)}</div>
+      </div>` : '';
+    return `
+      <div style="margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <div style="background:${cls};color:white;font-size:10px;font-weight:700;padding:4px 12px;border-radius:10px;text-transform:uppercase;letter-spacing:0.5px;">${label}</div>
+          <div style="font-size:13px;color:var(--gray-400);">${desc}</div>
+        </div>
+        <div class="plan-table">
+          <div class="plan-table-head" style="grid-template-columns:1fr 110px 120px;"><div>Win</div><div class="plan-col-right">Per Qtr</div><div class="plan-col-right">Engagement Total</div></div>
+          ${winRows(wins)}
+          <div class="plan-total" style="background:${bgStyle};">
+            <div style="font-size:11px;color:rgba(255,255,255,0.55);margin-bottom:4px;">${wins.length} win${wins.length!==1?'s':''} · base engagement</div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+              <div>
+                <div class="plan-total-amount">${fmt(base)}</div>
+                <div class="plan-total-sub">total base${wins.some(o=>o.tier==='CW')?' across estimated quarters':''}</div>
+              </div>
+            </div>
+            ${meFooter}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  const nowSection = bucketSection('Now', 'var(--green)', 'Immediate activation — <strong style="color:var(--navy-text);">billed upon approval of this proposal</strong>', nowWins, 'var(--navy-bg)');
+  const nextSection = bucketSection('Next', 'var(--teal)', 'On deck — <strong style="color:var(--navy-text);">activated upon your confirmation after Now completes</strong>', nextWins, 'var(--teal)');
+  const laterSection = bucketSection('Later', 'var(--gray-400)', 'Future phase — <strong style="color:var(--navy-text);">execute when your organization is ready</strong>', laterWins, 'var(--gray-300)');
+
+  const qwUCItems = (S.qwUC.length ? S.qwUC : ['AI-assisted email & proposal drafting','Automated meeting summaries','Intelligent document extraction','Contract review automation','Data reporting & dashboards','Lead qualification scoring','Customer support routing','Invoice processing automation'])
+    .map(u => `<div class="ref-item">${u}</div>`).join('');
+  const cwUCItems = (S.cwUC.length ? S.cwUC : ['End-to-end client onboarding workflow','Predictive revenue intelligence platform','Multi-system AI integration layer','Custom AI model development','Organization-wide AI enablement program','Automated compliance monitoring'])
+    .map(u => `<div class="ref-item">${u}</div>`).join('');
+
+  document.getElementById('plan-content').innerHTML = `
+    <div class="section-label">Step 1 of 2 · Alignment</div>
+    <h2>Your engagement plan</h2>
+    <p class="lead">Here's how your wins are structured across implementation phases. Now wins are billed on approval. Next and Later activate as each prior phase completes.</p>
+    ${nowSection}
+    ${nextSection}
+    ${laterSection || '<div style="margin-bottom:28px;"></div>'}
+    <div style="margin-top:8px;">
+      <button class="ref-toggle-btn" onclick="toggleRef(this)">
+        <span>↓</span> View engagement type examples
+      </button>
+      <div class="ref-body" id="ref-body">
+        <div class="ref-grid">
+          <div class="ref-card">
+            <div class="ref-title qw">Quick Win — 1 quarter · ${fmt(S.qwRate)} per win</div>
+            ${qwUCItems}
+          </div>
+          <div class="ref-card">
+            <div class="ref-title cw">Comprehensive Win — 2+ quarters · ${fmt(S.cwRate)}/qtr per win</div>
+            ${cwUCItems}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goTo(3)">← Back</button>
+      <button class="btn-primary" onclick="goTo(5)" style="font-size:16px;padding:15px 36px;" ${nowWins.length===0?'disabled':''}>Confirm this plan →</button>
+    </div>`;
+}
+
+function toggleRef(btn) {
+  const body = document.getElementById('ref-body');
+  body.classList.toggle('open');
+  btn.querySelector('span').textContent = body.classList.contains('open') ? '↑' : '↓';
+}
+
+// ─── SCREEN 5: PAYMENT SCHEDULE ────────────────────────────
+function renderPaymentSchedule() {
+  const base     = getNowBaseTotal();
+  const meTotal  = getNowMETotal();
+  const upfront  = Math.round(base * (1 - UPFRONT_DISCOUNT));
+  const savings  = base - upfront;
+  const nowWins  = getByTiming('now');
+  const hasCW    = nowWins.some(o => o.tier === 'CW');
+  const termQtrs = nowWins.length ? Math.max(...nowWins.map(o => winQtrs(o))) : 1;
+
+  // Update lead copy
+  const leadEl = document.getElementById('s5-lead');
+  if (leadEl) {
+    leadEl.textContent = hasCW
+      ? `Your Now engagement runs for up to ${termQtrs} quarter${termQtrs !== 1 ? 's' : ''}, launching upon approval. Choose how you'd like to be invoiced for this fixed-term engagement.`
+      : `Your Now wins each run for one quarter, invoiced once at activation. This is a fixed-term engagement with no automatic renewal.`;
+  }
+
+  // Engagement term summary banner
+  const termBanner = `
+    <div style="grid-column:1/-1;display:flex;align-items:center;gap:16px;background:var(--navy-bg);border-radius:12px;padding:18px 24px;margin-bottom:4px;">
+      <div style="font-size:34px;font-weight:700;color:var(--green);line-height:1;flex-shrink:0;">${termQtrs}</div>
+      <div style="flex:1;">
+        <div style="font-size:14px;font-weight:700;color:white;">Quarter${termQtrs !== 1 ? 's' : ''} — fixed engagement term</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:3px;">Launches upon approval · Concludes end of Q${termQtrs} · No automatic renewal</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;">
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:2px;">Base engagement total</div>
+        <div style="font-size:20px;font-weight:700;color:var(--green);">${fmt(base)}</div>
+      </div>
+    </div>`;
+
+  if (!hasCW) {
+    // QW-only — single invoice at activation, auto-select
+    document.getElementById('duration-grid').innerHTML = termBanner + `
+      <div class="dur-card selected" id="dc-quarterly" onclick="selectPaySchedule('quarterly')" style="grid-column:1/-1;max-width:520px;">
+        <div class="dur-title">Invoiced at Activation</div>
+        <div class="dur-price">${fmt(base)}<span> total</span></div>
+        <p class="dur-desc">Each Quick Win is invoiced once when it activates. Engagement is complete within one quarter.</p>
+        <ul class="dur-list">
+          <li>${fmt(S.qwRate)} per Quick Win, invoiced at launch</li>
+          ${S.meEnabled ? `<li>M&amp;E invoiced separately — ${fmt(meTotal)}/6 months, semi-annual</li>` : ''}
+          <li>Fixed 1-quarter term · No automatic renewal</li>
+          <li>Either party may terminate with 30 days written notice</li>
+        </ul>
+      </div>`;
+    S.paySchedule = 'quarterly';
+    document.getElementById('btn-dur-next').disabled = false;
+  } else {
+    // Has CWs — quarterly invoicing or single upfront payment
+    const qtrBullets = [
+      `QWs invoiced ${fmt(S.qwRate)} at activation — 1 quarter`,
+      `CWs invoiced ${fmt(S.cwRate)}/quarter through their estimated term`,
+      S.meEnabled ? `M&amp;E invoiced separately — ${fmt(meTotal)}/6 months, semi-annual` : null,
+      `Fixed ${termQtrs}-quarter term · No automatic renewal`,
+      `Either party may terminate with 30 days written notice`,
+    ].filter(Boolean).map(t => `<li>${t}</li>`).join('');
+
+    const upfrontBullets = [
+      `One invoice at signing covers your full ${termQtrs}-quarter engagement`,
+      `Save ${fmt(savings)} — ${Math.round(UPFRONT_DISCOUNT*100)}% preferred rate`,
+      S.meEnabled ? `M&amp;E invoiced separately — ${fmt(meTotal)}/6 months, semi-annual` : null,
+      `Fixed ${termQtrs}-quarter term · No automatic renewal`,
+      `Either party may terminate with 30 days written notice`,
+    ].filter(Boolean).map(t => `<li>${t}</li>`).join('');
+
+    document.getElementById('duration-grid').innerHTML = termBanner + `
+      <div class="dur-card" id="dc-quarterly" onclick="selectPaySchedule('quarterly')">
+        <div class="dur-title">Quarterly Invoicing</div>
+        <div class="dur-price">${fmt(base)}<span> total</span></div>
+        <p class="dur-desc">Invoiced at the start of each quarter as your engagement progresses.</p>
+        <ul class="dur-list">${qtrBullets}</ul>
+      </div>
+      <div class="dur-card" id="dc-upfront" onclick="selectPaySchedule('upfront')">
+        <div class="dur-badge">Save ${Math.round(UPFRONT_DISCOUNT*100)}%</div>
+        <div class="dur-title">Upfront Payment</div>
+        <div class="dur-price">${fmt(upfront)}<span> total</span></div>
+        <p class="dur-desc">One invoice at signing covers your full ${termQtrs}-quarter engagement at a preferred rate.</p>
+        <ul class="dur-list">${upfrontBullets}</ul>
+      </div>`;
+    if (S.paySchedule) {
+      const el = document.getElementById(`dc-${S.paySchedule}`);
+      if (el) { el.classList.add('selected'); document.getElementById('btn-dur-next').disabled = false; }
+    }
+  }
+
+  if (S.meEnabled && nowWins.length) {
+    document.getElementById('evo-note').innerHTML = `
+      <div style="margin-top:20px;">
+        <div style="font-size:13px;font-weight:700;color:var(--navy-text);margin-bottom:6px;">Maintenance &amp; Evolution Bundle</div>
+        <div style="font-size:13px;color:var(--gray-400);margin-bottom:14px;line-height:1.6;">M&amp;E begins after each win's build phase concludes and is invoiced semi-annually. This is a separate agreement from the base engagement — it continues at your election and can be cancelled with 30 days written notice.</div>
+        ${nowWins.map(o => {
+          const meSt  = winQtrs(o) + 1;
+          const rate  = mePeriodRate(o);
+          const rows  = [1,2,3].map(n => {
+            const endQ = meSt + (n * 2) - 1;
+            return `<div style="display:flex;align-items:baseline;gap:14px;font-size:14px;margin-bottom:6px;">
+              <span style="color:var(--gray-300);font-weight:700;min-width:18px;text-align:right;">${n}x</span>
+              <span style="font-weight:700;color:var(--teal);min-width:90px;">${fmt(n * rate)}</span>
+              <span style="color:var(--gray-400);">covering Q${meSt} – Q${endQ}</span>
+            </div>`;
+          }).join('');
+          return `
+            <div style="background:white;border:1px solid var(--gray-100);border-radius:10px;padding:16px 20px;margin-bottom:10px;">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+                <span style="font-size:14px;font-weight:600;color:var(--navy-text);">${o.title}</span>
+                <span class="tier-pill ${o.tier.toLowerCase()}">${o.tier === 'QW' ? 'Quick Win' : 'Comprehensive Win'}</span>
+                <span style="font-size:10px;color:var(--teal);font-weight:700;padding:2px 8px;background:rgba(9,137,177,0.08);border-radius:10px;margin-left:auto;">M&amp;E begins Q${meSt}</span>
+              </div>
+              ${rows}
+              <div style="font-size:11px;color:var(--gray-300);margin-top:4px;padding-top:8px;border-top:1px dashed var(--gray-100);">${fmt(rate)}/period · semi-annual · continues at your election</div>
+            </div>`;
+        }).join('')}
+      </div>`;
+  } else {
+    document.getElementById('evo-note').innerHTML = `<div class="info-box" style="margin-top:16px;margin-bottom:0;">
+      <strong>Maintenance &amp; Evolution Bundle</strong> is an optional semi-annual maintenance agreement (QW: ${fmt(S.qwMERate)}/6 months · CW: ${fmt(S.cwMERate)}/6 months per win). Ask your Augusto team to include it in your Statement of Work.
+    </div>`;
+  }
+}
+
+function selectPaySchedule(ps) {
+  S.paySchedule = ps;
+  document.querySelectorAll('.dur-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById(`dc-${ps}`).classList.add('selected');
+  document.getElementById('btn-dur-next').disabled = false;
+}
+
+// ─── SCREEN 6: SUMMARY ─────────────────────────────────────
+function renderSummary() {
+  const nowWins   = getByTiming('now');
+  const nextWins  = getByTiming('next');
+  const laterWins = getByTiming('later');
+  const base    = getNowBaseTotal();
+  const meTotal = getNowMETotal();
+  const price   = S.paySchedule === 'upfront' ? Math.round(base * (1 - UPFRONT_DISCOUNT)) : base;
+  const savings = base - Math.round(base * (1 - UPFRONT_DISCOUNT));
+  document.getElementById('summary-box').innerHTML = `
+    <div class="summary-eyebrow">Engagement Summary · ${S.company}</div>
+    <div class="summary-row"><div class="s-label">Now — Immediate</div><div class="s-value">${nowWins.map(o=>o.title).join(', ') || '—'}</div></div>
+    ${nextWins.length?`<div class="summary-row"><div class="s-label">Next — On deck</div><div class="s-value">${nextWins.map(o=>o.title).join(', ')}</div></div>`:''}
+    ${laterWins.length?`<div class="summary-row"><div class="s-label">Later — Future phase</div><div class="s-value">${laterWins.map(o=>o.title).join(', ')}</div></div>`:''}
+    <div class="summary-row"><div class="s-label">Payment</div><div class="s-value">${S.paySchedule === 'upfront' ? 'Pay upfront (10% discount)' : 'Quarterly, as delivered'}</div></div>
+    <div class="summary-row"><div class="s-label">Base engagement — Now wins</div><div class="s-value big">${fmt(price)}</div></div>
+    ${S.paySchedule === 'upfront' ? `<div class="summary-row"><div class="s-label">Savings</div><div class="s-value green">${fmt(savings)} preferred rate discount</div></div>` : ''}
+    ${S.meEnabled ? `<div class="summary-row"><div class="s-label">M&amp;E Bundle (billed semi-annually)</div><div class="s-value green">${fmt(meTotal)}/6 months</div></div>` : ''}`;
+}
+
+// ─── SCREEN 7: LOI ─────────────────────────────────────────
+function renderLOI() {
+  const nowWins   = getByTiming('now');
+  const nextWins  = getByTiming('next');
+  const laterWins = getByTiming('later');
+  const base    = getNowBaseTotal();
+  const meTotal = getNowMETotal();
+  const price   = S.paySchedule === 'upfront' ? Math.round(base * (1 - UPFRONT_DISCOUNT)) : base;
+  const savings = base - Math.round(base * (1 - UPFRONT_DISCOUNT));
+  const today   = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+
+  ['loi-co','loi-co-2','loi-co-3'].forEach(id => document.getElementById(id).textContent = S.company);
+  document.getElementById('loi-date').textContent = today;
+  document.getElementById('loi-by').textContent = S.preparedBy;
+  document.getElementById('sig-date').value = new Date().toISOString().split('T')[0];
+
+  document.getElementById('loi-overview').innerHTML = `
+    <tr><td>Client</td><td>${S.company}${S.contact?' · '+S.contact:''}</td></tr>
+    <tr><td>Payment</td><td>${S.paySchedule === 'upfront' ? 'Upfront — full engagement at preferred rate (10% discount)' : 'Quarterly, billed as delivered'}</td></tr>
+    <tr><td>Estimated start</td><td>Within 30 days of signed agreement</td></tr>`;
+
+  document.getElementById('loi-scope').innerHTML = `
+    <p>Augusto Digital will activate AI capabilities across the following opportunities, organized by implementation phase:</p>
+    ${nowWins.length ? `<p><strong>Now (Immediate Activation):</strong></p><ul>${nowWins.map(o=>`<li><strong>${o.title}</strong>${o.desc?' — '+o.desc:''} — ${fmt(winQtrRate(o))}/qtr${o.tier==='CW'?`, ~${winQtrs(o)} quarter${winQtrs(o)!==1?'s':''} estimated`:`, 1 quarter`}</li>`).join('')}</ul>` : ''}
+    ${nextWins.length ? `<p><strong>Next (Following Now Completion):</strong></p><ul>${nextWins.map(o=>`<li><strong>${o.title}</strong>${o.desc?' — '+o.desc:''}</li>`).join('')}</ul>` : ''}
+    ${laterWins.length ? `<p><strong>Later (Future Phase):</strong></p><ul>${laterWins.map(o=>`<li><strong>${o.title}</strong>${o.desc?' — '+o.desc:''}</li>`).join('')}</ul>` : ''}
+    ${S.meEnabled ? `<p>A <strong>Maintenance &amp; Evolution Bundle</strong> is included, billed semi-annually and beginning after each win's build phase concludes — ${nowWins.map(o=>`${o.title}: ${fmt(mePeriodRate(o))}/6 mo beginning Q${winQtrs(o)+1}`).join('; ')}. This is a separate, ongoing agreement from the base engagement.</p>` : ''}`;
+
+  const nowInvRows = nowWins.map(o => {
+    const base1 = winBaseTotal(o);
+    const qtrs1 = winQtrs(o);
+    const meSt  = winQtrs(o) + 1;
+    const meRow = S.meEnabled ? `<tr><td style="padding-left:18px;color:var(--teal);font-size:13px;">↳ M&amp;E Bundle <span style="color:var(--gray-300);font-size:11px;">(begins Q${meSt})</span></td><td style="color:var(--teal);">${fmt(winMETotal(o))}/6 mo</td></tr>` : '';
+    return `<tr><td>${o.title} <span style="color:var(--gray-300);font-size:12px;">${o.tier==='QW'?'(QW · 1 qtr)':'(CW · ~'+qtrs1+' qtrs)'}</span></td><td style="font-weight:600;color:var(--navy-text);">${fmt(winQtrRate(o))}/qtr × ${qtrs1} = ${fmt(base1)}</td></tr>${meRow}`;
+  }).join('');
+
+  document.getElementById('loi-investment').innerHTML = `
+    <tr><td colspan="2" style="font-weight:700;color:var(--navy-text);padding-bottom:8px;">Now — Immediate Activation</td></tr>
+    ${nowInvRows}
+    <tr><td style="padding-top:12px;font-weight:700;color:var(--navy-text);">Base Engagement Total</td><td style="padding-top:12px;font-size:17px;font-weight:700;color:var(--green-dark);">${fmt(base)}</td></tr>
+    ${S.paySchedule === 'upfront' ? `
+    <tr><td>Preferred Rate Discount (${Math.round(UPFRONT_DISCOUNT*100)}%)</td><td style="color:var(--green-dark);">−${fmt(savings)}</td></tr>
+    <tr><td style="font-weight:700;">Discounted Total</td><td style="font-size:17px;font-weight:700;color:var(--green-dark);">${fmt(price)}</td></tr>` : ''}
+    ${S.meEnabled ? `
+    <tr><td colspan="2" style="font-weight:700;color:var(--teal);padding-top:16px;padding-bottom:6px;">Maintenance &amp; Evolution Bundle — begins after build</td></tr>
+    ${nowWins.map(o => {
+      const meSt = winQtrs(o) + 1;
+      const rate = mePeriodRate(o);
+      const periodRows = [1,2,3].map(n => {
+        const endQ = meSt + (n * 2) - 1;
+        return `<tr><td style="padding-left:18px;font-size:13px;color:var(--gray-400);">${n}x = ${fmt(n * rate)}</td><td style="font-size:13px;color:var(--teal);">covering Q${meSt} – Q${endQ}</td></tr>`;
+      }).join('');
+      return `<tr><td style="padding-top:4px;font-size:13px;font-weight:600;color:var(--navy-text);">${o.title} <span style="color:var(--gray-300);font-weight:400;">— begins Q${meSt} · ${fmt(rate)}/period</span></td><td></td></tr>${periodRows}`;
+    }).join('')}
+    <tr><td style="font-weight:700;padding-top:10px;">M&amp;E per 6-month period (all wins)</td><td style="font-weight:700;color:var(--teal);padding-top:10px;">${fmt(meTotal)}/6 mo</td></tr>` : ''}
+    ${nextWins.length ? `
+    <tr><td colspan="2" style="font-weight:700;color:var(--navy-text);padding-top:16px;padding-bottom:6px;">Next — Activated After Now</td></tr>
+    ${nextWins.map(o=>`<tr><td>${o.title}</td><td style="color:var(--gray-400);">${fmt(winQtrRate(o))}/qtr × ~${winQtrs(o)} qtrs = ${fmt(winBaseTotal(o))}</td></tr>`).join('')}` : ''}
+    ${laterWins.length ? `
+    <tr><td colspan="2" style="font-weight:700;color:var(--navy-text);padding-top:16px;padding-bottom:6px;">Later — Future Phase</td></tr>
+    ${laterWins.map(o=>`<tr><td>${o.title}</td><td style="color:var(--gray-400);">${fmt(winQtrRate(o))}/qtr × ~${winQtrs(o)} qtrs = ${fmt(winBaseTotal(o))}</td></tr>`).join('')}` : ''}
+    <tr><td style="padding-top:14px;">Invoicing</td><td style="padding-top:14px;">${S.paySchedule === 'upfront' ? 'Single invoice at signing — full engagement, preferred rate' : 'Invoiced at the start of each quarter through the engagement term'}</td></tr>
+    <tr><td>Renewal</td><td>None — fixed-term engagement. Terminable with 30 days written notice.</td></tr>`;
+}
+
+function checkSig() {
+  const ok = ['sig-sig','sig-name','sig-title','sig-date'].every(id => document.getElementById(id).value.trim());
+  document.getElementById('btn-submit').disabled = !ok;
+}
+
+function submitLOI() {
+  const base    = getNowBaseTotal();
+  const price   = S.paySchedule === 'upfront' ? Math.round(base * (1 - UPFRONT_DISCOUNT)) : base;
+  const meTotal = getNowMETotal();
+  const nowWins = getByTiming('now');
+  const rec = {
+    ts: new Date().toISOString(), company: S.company, contact: S.contact,
+    paySchedule: S.paySchedule, baseTotal: price, meTotal,
+    opps: S.opps.map(o=>({title:o.title,tier:o.tier,timing:o.timing,cwQtrs:o.cwQtrs})),
+    sigName: document.getElementById('sig-name').value,
+    sigTitle: document.getElementById('sig-title').value,
+    sigDate: document.getElementById('sig-date').value
+  };
+  try { const log=JSON.parse(localStorage.getItem('augusto_loi')||'[]'); log.push(rec); localStorage.setItem('augusto_loi',JSON.stringify(log)); } catch(e){}
+  // Notify rep via email when lead submits in lead mode
+  if (isLeadMode && S.repEmail) {
+    const sigName  = document.getElementById('sig-name').value;
+    const sigTitle = document.getElementById('sig-title').value;
+    const sigDate  = document.getElementById('sig-date').value;
+    const bodyLines = [
+      'LOI RECEIVED — ACTION REQUIRED',
+      '',
+      `Client:       ${S.company}`,
+      `Contact:      ${S.contact || '—'}`,
+      `Prepared by:  ${S.preparedBy}`,
+      '',
+      `Signed by:    ${sigName}`,
+      `Title:        ${sigTitle}`,
+      `Date:         ${sigDate}`,
+      '',
+      'NOW WINS:',
+      ...nowWins.map(o => `  • ${o.title} (${o.tier === 'QW' ? 'Quick Win · 1 qtr' : 'Comp. Win · ~' + winQtrs(o) + ' qtrs'}) — ${fmt(winBaseTotal(o))}`),
+      '',
+      `Base Total:   ${fmt(price)}${S.paySchedule === 'upfront' ? ' (upfront, 10% discount)' : ' (quarterly billing)'}`,
+    ];
+    if (S.meEnabled) bodyLines.push(`M&E Bundle:   ${fmt(meTotal)}/6 months`);
+    bodyLines.push('', 'Follow up within 1 business day to activate the engagement.');
+    const subject = encodeURIComponent(`LOI Received — ${S.company}`);
+    const body    = encodeURIComponent(bodyLines.join('\n'));
+    setTimeout(() => { window.location.href = `mailto:${S.repEmail}?subject=${subject}&body=${body}`; }, 400);
+  }
+  document.getElementById('confirm-summary').textContent =
+    `${nowWins.length} Now win${nowWins.length!==1?'s':''} · ${fmt(price)} base${S.meEnabled?' + M&E':''} · ${S.paySchedule === 'upfront' ? 'Upfront' : 'Quarterly'}`;
+  goTo(8);
+}
+
+// ─── LEAD LINK ─────────────────────────────────────────────
+function generateLeadLink() {
+  const company    = document.getElementById('cfg-company').value.trim() || 'your company';
+  const contact    = document.getElementById('cfg-contact').value.trim();
+  const preparedBy = document.getElementById('cfg-preparedby').value.trim() || 'Lawrence McGlown';
+  const repEmail   = document.getElementById('cfg-rep-email').value.trim() || 'lmcglown@augustodigital.com';
+  const qwRate     = parseInt(document.getElementById('cfg-qw-rate').value) || 25000;
+  const cwRate     = parseInt(document.getElementById('cfg-cw-rate').value) || 100000;
+  const meEnabled  = document.getElementById('svc-me').checked;
+  const qwMERate   = parseInt(document.getElementById('cfg-qw-me-rate').value) || 30000;
+  const cwMERate   = parseInt(document.getElementById('cfg-cw-me-rate').value) || 60000;
+  const opps = [];
+  document.querySelectorAll('#opp-list .opp-admin-card').forEach(card => {
+    const title = card.querySelector('.opp-title-input').value.trim();
+    if (!title) return;
+    const desc   = card.querySelector('.opp-desc-input').value.trim();
+    const tier   = card.dataset.selectedTier || 'QW';
+    const cwQtrs = Math.max(2, parseInt(card.querySelector('.opp-cwqtrs-input').value) || 2);
+    const func   = card.querySelector('.opp-func-input').value || 'Company';
+    opps.push({ title, desc, tier, cwQtrs, func, timing: null });
+  });
+  const qwUC = (document.getElementById('cfg-qw-usecases').value || '').split('\n').map(l => l.trim()).filter(Boolean);
+  const cwUC = (document.getElementById('cfg-cw-usecases').value || '').split('\n').map(l => l.trim()).filter(Boolean);
+  const cfg = { company, contact, preparedBy, repEmail, qwRate, cwRate, meEnabled, qwMERate, cwMERate, opps, qwUC, cwUC };
+  try {
+    const encoded = btoa(encodeURIComponent(JSON.stringify(cfg)));
+    const url = location.origin + location.pathname + '?c=' + encoded;
+    document.getElementById('lead-link-company').textContent = company;
+    document.getElementById('lead-link-url').value = url;
+    document.getElementById('copy-lead-btn').textContent = 'Copy Link';
+    document.getElementById('copy-lead-btn').style.background = '#22B161';
+    document.getElementById('lead-link-file-warning').style.display = location.protocol === 'file:' ? 'block' : 'none';
+    document.getElementById('lead-link-modal').style.display = 'flex';
+  } catch(e) {
+    alert('Could not generate link. Please check the configuration and try again.');
+  }
+}
+
+function copyLeadLink() {
+  const input = document.getElementById('lead-link-url');
+  const btn   = document.getElementById('copy-lead-btn');
+  input.select();
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(input.value).then(() => {
+      btn.textContent = '✓ Copied!'; btn.style.background = '#128745';
+      setTimeout(() => { btn.textContent = 'Copy Link'; btn.style.background = '#22B161'; }, 2500);
+    });
+  } else {
+    document.execCommand('copy');
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => { btn.textContent = 'Copy Link'; }, 2500);
+  }
+}
+
+// ─── INIT ──────────────────────────────────────────────────
+(function init() {
+  // ── Lead mode: decode config from URL ──────────────────────
+  try {
+    const params = new URLSearchParams(location.search);
+    const cfgStr = params.get('c');
+    if (cfgStr) {
+      const parsed = JSON.parse(decodeURIComponent(atob(cfgStr)));
+      Object.assign(S, parsed);
+      isLeadMode = true;
+      // Hide admin setup button(s)
+      document.querySelectorAll('button[onclick="toggleAdmin()"]').forEach(el => el.style.display = 'none');
+    }
+  } catch(e) { console.warn('Lead config parse error:', e); }
+
+  if (!isLeadMode) {
+    // Pre-populated example opportunities (rep/demo mode)
+    S.opps = [
+      { title: 'AI-assisted email & proposal drafting', desc: 'Draft client-ready emails and proposals from notes in seconds', tier: 'QW', timing: null, cwQtrs: 2, func: 'Sales' },
+      { title: 'Automated meeting summaries', desc: 'Auto-generate, format, and distribute structured meeting notes', tier: 'QW', timing: null, cwQtrs: 2, func: 'Company' },
+      { title: 'Intelligent document extraction', desc: 'Extract structured data from contracts, forms, and reports', tier: 'QW', timing: null, cwQtrs: 2, func: 'Operations' },
+      { title: 'Lead qualification & scoring', desc: 'Automate lead scoring using CRM and behavioral signals', tier: 'QW', timing: null, cwQtrs: 2, func: 'Sales' },
+      { title: 'End-to-end client onboarding workflow', desc: 'AI-driven activation from signed contract through kickoff', tier: 'CW', timing: null, cwQtrs: 2, func: 'Operations' },
+      { title: 'Predictive revenue intelligence', desc: 'Forecast pipeline health and flag at-risk accounts 60 days out', tier: 'CW', timing: null, cwQtrs: 3, func: 'Sales' },
+    ];
+    S.qwUC = [
+      'AI-assisted email & proposal drafting',
+      'Automated meeting summaries & action items',
+      'Intelligent document extraction & classification',
+      'Lead qualification & scoring automation',
+      'Customer support ticket routing',
+      'Invoice processing & AP automation',
+      'Contract review & redline suggestions',
+      'Data reporting & dashboard generation',
+    ];
+    S.cwUC = [
+      'End-to-end client onboarding workflow',
+      'Predictive revenue intelligence platform',
+      'Multi-system AI integration layer',
+      'Custom AI model for product recommendations',
+      'Organization-wide AI enablement program',
+      'Automated regulatory compliance monitoring',
+    ];
+    // Pre-fill admin panel fields
+    S.opps.forEach(o => addOppField(o));
+    document.getElementById('cfg-qw-usecases').value = S.qwUC.join('\n');
+    document.getElementById('cfg-cw-usecases').value = S.cwUC.join('\n');
+    document.getElementById('svc-me').checked = S.meEnabled;
+  }
+
+  document.getElementById('welcome-company').textContent = S.company;
+  renderDragList();
+  renderTimingList();
+  renderPaymentSchedule();
+})();
+</script>
+</body>
+</html>
