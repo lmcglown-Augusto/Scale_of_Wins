@@ -17,6 +17,8 @@
   --gray-200: #C2C8CC;
   --gray-300: #818B92;
   --gray-400: #686C76;
+  --amber: #B18022;
+  --amber-dark: #7A5816;
   --font-display: 'Neuton', Georgia, serif;
   --font-primary: 'Barlow', system-ui, sans-serif;
 }
@@ -30,6 +32,7 @@ body { font-family: var(--font-primary); background: var(--bg-default); color: v
 /* ── NAV ── */
 .nav { background: var(--navy-bg); padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
 .nav-wordmark { color: white; font-family: var(--font-primary); font-weight: 600; font-size: 17px; display: flex; align-items: center; gap: 10px; }
+.brand-logo { height: 32px; width: auto; display: block; }
 
 /* ── GLOBAL PROGRESS BAR ── */
 #progress-bar-global { background: white; border-bottom: 1px solid var(--gray-100); flex-shrink: 0; padding: 0 40px; display: none; }
@@ -129,6 +132,9 @@ h2 { font-family: var(--font-display); font-size: 36px; font-weight: 400; color:
 .plan-phase-note { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 14px; line-height: 1.6; max-width: 480px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); }
 .plan-services { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
 .svc-tag { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 12px; background: rgba(34,177,97,0.15); color: var(--green); border: 1px solid rgba(34,177,97,0.25); }
+.met-row { padding:9px 20px 9px 20px;background:rgba(9,137,177,0.04);border-top:1px dashed var(--gray-100);display:flex;justify-content:space-between;align-items:center; }
+.met-row label { display:flex; align-items:center; gap:8px; cursor:pointer; font-size:12px; color:var(--teal); }
+.met-row input[type="checkbox"] { width:15px; height:15px; cursor:pointer; accent-color: var(--teal); }
 
 /* Parking lot */
 .parking-lot { background: white; border: 1px solid var(--gray-100); border-radius: 14px; overflow: hidden; margin-bottom: 28px; margin-top: 16px; }
@@ -231,6 +237,7 @@ h2 { font-family: var(--font-display); font-size: 36px; font-weight: 400; color:
 .admin-label { font-size: 11px; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block; }
 .admin-input { width: 100%; border: 1px solid var(--gray-200); border-radius: 8px; padding: 10px 14px; font-family: var(--font-primary); font-size: 14px; color: var(--navy-text); outline: none; transition: border-color 0.2s; resize: vertical; }
 .admin-input:focus { border-color: var(--teal); }
+.admin-note { font-size: 11px; color: var(--gray-300); margin-top: 4px; }
 .opp-admin-card { background: var(--bg-default); border-radius: 8px; padding: 16px; margin-bottom: 12px; }
 .add-opp-btn { width: 100%; padding: 12px; border: 2px dashed var(--gray-200); border-radius: 8px; cursor: pointer; background: none; font-family: var(--font-primary); font-size: 14px; color: var(--gray-400); margin-bottom: 20px; transition: all 0.2s; }
 .add-opp-btn:hover { border-color: var(--teal); color: var(--teal); }
@@ -271,11 +278,11 @@ h2 { font-family: var(--font-display); font-size: 36px; font-weight: 400; color:
 <body>
 
 <!-- CHROME BANNER -->
-<div id="chrome-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:#FFF3CD;border-bottom:2px solid #F59E0B;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:'Barlow',system-ui,sans-serif;font-size:13px;color:#92400E;">
+<div id="chrome-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(177,128,34,0.10);border-bottom:2px solid #B18022;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:'Barlow',system-ui,sans-serif;font-size:13px;color:#7A5816;">
   <span>⚠ This experience is optimized for <strong>Google Chrome</strong>. You appear to be using a different browser — some features may not display correctly.</span>
   <div style="display:flex;gap:10px;flex-shrink:0;">
-    <a href="#" onclick="openInChrome(event)" style="background:#F59E0B;color:white;padding:6px 14px;border-radius:6px;font-weight:600;text-decoration:none;font-size:12px;">How to open in Chrome</a>
-    <button onclick="document.getElementById('chrome-banner').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:18px;color:#92400E;line-height:1;">✕</button>
+    <a href="#" onclick="openInChrome(event)" style="background:#B18022;color:white;padding:6px 14px;border-radius:6px;font-weight:600;text-decoration:none;font-size:12px;">How to open in Chrome</a>
+    <button onclick="document.getElementById('chrome-banner').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:18px;color:#7A5816;line-height:1;">✕</button>
   </div>
 </div>
 <div id="chrome-howto" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:10000;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;">
@@ -316,7 +323,7 @@ function openInChrome(e) {
       <button id="copy-lead-btn" onclick="copyLeadLink()" style="background:#22B161;color:white;border:none;padding:11px 20px;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;flex:1;transition:background 0.15s;">Copy Link</button>
       <button onclick="document.getElementById('lead-link-modal').style.display='none'" style="background:none;border:2px solid #C2C8CC;padding:11px 20px;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;color:#0E1E2B;">Close</button>
     </div>
-    <div id="lead-link-file-warning" style="display:none;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400E;margin-bottom:12px;">⚠ This file is running locally. The link above won't work until the tool is hosted at a URL. Copy and save the link now — it will be valid once you upload the file to GitHub Pages or similar hosting.</div>
+    <div id="lead-link-file-warning" style="display:none;background:rgba(177,128,34,0.08);border:1px solid #B18022;border-radius:8px;padding:10px 14px;font-size:12px;color:#7A5816;margin-bottom:12px;">⚠ This file is running locally. The link above won't work until the tool is hosted at a URL. Copy and save the link now — it will be valid once you upload the file to GitHub Pages or similar hosting.</div>
     <div style="font-size:12px;color:#818B92;line-height:1.5;">Each lead gets a unique URL encoding their specific proposal. When they submit the LOI, their rep receives an email notification. Generate a new link any time you update the setup.</div>
   </div>
 </div>
@@ -338,42 +345,9 @@ function openInChrome(e) {
 
   <div style="height:1px;background:var(--gray-100);margin:18px 0;"></div>
 
-  <!-- Billing rates -->
-  <div class="admin-section-title">Billing Rates</div>
-  <div class="admin-section-sub">Set the per-win, per-quarter rate for each engagement type. Total scales with the number of active wins.</div>
-  <div class="rate-grid">
-    <div class="admin-field" style="margin-bottom:0;">
-      <label class="admin-label">Quick Win Rate / qtr</label>
-      <input class="admin-input" id="cfg-qw-rate" type="number" value="25000" min="0" step="1000">
-    </div>
-    <div class="admin-field" style="margin-bottom:0;">
-      <label class="admin-label">Comprehensive Win Rate / qtr</label>
-      <input class="admin-input" id="cfg-cw-rate" type="number" value="100000" min="0" step="5000">
-    </div>
-  </div>
-
-  <div style="height:1px;background:var(--gray-100);margin:18px 0;"></div>
-
-  <!-- M&E Bundle -->
-  <div class="admin-section-title">Maintenance &amp; Evolution Bundle</div>
-  <div class="admin-section-sub">Optional add-on billed semi-annually. Toggle to include in this proposal.</div>
-  <label class="svc-check-label" style="margin-bottom:14px;"><input type="checkbox" id="svc-me" checked> Include M&amp;E Bundle in this proposal</label>
-  <div class="rate-grid">
-    <div class="admin-field" style="margin-bottom:0;">
-      <label class="admin-label">QW M&amp;E Rate (per 6 months)</label>
-      <input class="admin-input" id="cfg-qw-me-rate" type="number" value="30000" min="0" step="1000">
-    </div>
-    <div class="admin-field" style="margin-bottom:0;">
-      <label class="admin-label">CW M&amp;E Rate (per 6 months)</label>
-      <input class="admin-input" id="cfg-cw-me-rate" type="number" value="60000" min="0" step="5000">
-    </div>
-  </div>
-
-  <div style="height:1px;background:var(--gray-100);margin:18px 0;"></div>
-
   <!-- Opportunities -->
   <div class="admin-section-title">Rumble Opportunities</div>
-  <div class="admin-section-sub">Add opportunities in priority order. Classify each as Quick Win or Comprehensive Win.</div>
+  <div class="admin-section-sub">Add opportunities in priority order. Classify each as Quick Win or Comprehensive Win, choose the delivery bucket that matches scope, then set the win's price and its ME&amp;T (Maintenance, Evolution &amp; Training) price. Price is enforced to the bucket's range.</div>
   <div id="opp-list"></div>
   <button class="add-opp-btn" onclick="addOppField()">+ Add Opportunity</button>
 
@@ -397,7 +371,7 @@ function openInChrome(e) {
 <!-- ═══ S1: WELCOME ═══ -->
 <div class="screen active" id="screen-1">
   <div class="nav">
-    <div class="nav-wordmark"><svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,26 2,26" fill="#22B161"/></svg>Augusto Digital</div>
+    <div class="nav-wordmark"><img class="brand-logo" alt="Augusto Digital"></div>
     <button onclick="toggleAdmin()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.8);padding:8px 16px;border-radius:6px;cursor:pointer;font-family:var(--font-primary);font-size:13px;font-weight:500;">⚙ Augusto Setup</button>
   </div>
   <div class="welcome-body">
@@ -410,7 +384,7 @@ function openInChrome(e) {
 
 <!-- ═══ S2: PRIORITIZE ═══ -->
 <div class="screen" id="screen-2">
-  <div class="nav"><div class="nav-wordmark"><svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,26 2,26" fill="#22B161"/></svg>Augusto Digital</div></div>
+  <div class="nav"><div class="nav-wordmark"><img class="brand-logo" alt="Augusto Digital"></div></div>
   <div class="content fade-in">
     <div class="section-label">Step 1 of 2 · Alignment</div>
     <h2>Prioritize your Scale of Win options</h2>
@@ -426,7 +400,7 @@ function openInChrome(e) {
 
 <!-- ═══ S3: TIMING ═══ -->
 <div class="screen" id="screen-3">
-  <div class="nav"><div class="nav-wordmark"><svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,26 2,26" fill="#22B161"/></svg>Augusto Digital</div></div>
+  <div class="nav"><div class="nav-wordmark"><img class="brand-logo" alt="Augusto Digital"></div></div>
   <div class="content fade-in">
     <div class="section-label">Step 1 of 2 · Alignment</div>
     <h2>When do you want to execute each win?</h2>
@@ -446,7 +420,7 @@ function openInChrome(e) {
 
 <!-- ═══ S4: ENGAGEMENT PLAN ═══ -->
 <div class="screen" id="screen-4">
-  <div class="nav"><div class="nav-wordmark"><svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,26 2,26" fill="#22B161"/></svg>Augusto Digital</div></div>
+  <div class="nav"><div class="nav-wordmark"><img class="brand-logo" alt="Augusto Digital"></div></div>
   <div class="content fade-in" id="plan-content">
     <!-- rendered by renderEngagementPlan() -->
   </div>
@@ -454,7 +428,7 @@ function openInChrome(e) {
 
 <!-- ═══ S5: STRUCTURE ═══ -->
 <div class="screen" id="screen-5">
-  <div class="nav"><div class="nav-wordmark"><svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,26 2,26" fill="#22B161"/></svg>Augusto Digital</div></div>
+  <div class="nav"><div class="nav-wordmark"><img class="brand-logo" alt="Augusto Digital"></div></div>
   <div class="content fade-in">
     <div class="section-label">Step 1 of 2 · Alignment</div>
     <h2>Your engagement structure</h2>
@@ -470,7 +444,7 @@ function openInChrome(e) {
 
 <!-- ═══ S6: SUMMARY ═══ -->
 <div class="screen" id="screen-6">
-  <div class="nav"><div class="nav-wordmark"><svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,26 2,26" fill="#22B161"/></svg>Augusto Digital</div></div>
+  <div class="nav"><div class="nav-wordmark"><img class="brand-logo" alt="Augusto Digital"></div></div>
   <div class="content fade-in">
     <div class="section-label">Step 1 Complete · Your Selection</div>
     <h2>Here's what you've chosen</h2>
@@ -486,7 +460,7 @@ function openInChrome(e) {
 
 <!-- ═══ S7: LOI ═══ -->
 <div class="screen" id="screen-7">
-  <div class="nav"><div class="nav-wordmark"><svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,26 2,26" fill="#22B161"/></svg>Augusto Digital</div></div>
+  <div class="nav"><div class="nav-wordmark"><img class="brand-logo" alt="Augusto Digital"></div></div>
   <div class="step2-bar">
     <div class="step2-inner">
       <div style="font-size:13px;font-weight:600;color:white;white-space:nowrap;">Step 2 of 2</div>
@@ -534,7 +508,7 @@ function openInChrome(e) {
 
 <!-- ═══ S8: CONFIRMATION ═══ -->
 <div class="screen" id="screen-8">
-  <div class="nav"><div class="nav-wordmark"><svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,26 2,26" fill="#22B161"/></svg>Augusto Digital</div></div>
+  <div class="nav"><div class="nav-wordmark"><img class="brand-logo" alt="Augusto Digital"></div></div>
   <div class="confirm-body">
     <div class="confirm-check">✓</div>
     <h2 style="font-family:var(--font-display);font-size:46px;font-weight:400;color:white;margin-bottom:14px;">You're in.</h2>
@@ -548,32 +522,59 @@ function openInChrome(e) {
 </div>
 
 <script>
+// ─── BRAND LOGO ────────────────────────────────────────────
+const BRAND_LOGO = 'data:image/png;base64,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';
+document.querySelectorAll('img.brand-logo').forEach(img => { img.src = BRAND_LOGO; });
+
+// ─── BUCKETS (delivery-time price bands) ───────────────────
+const BUCKETS = {
+  QW: [
+    { id:'d30', label:'30 days or less', min:25000,  max:40000,  qtrs:1 },
+    { id:'d60', label:'30–60 days',      min:40000,  max:60000,  qtrs:1 },
+    { id:'d90', label:'60–90 days',      min:75000,  max:90000,  qtrs:1 },
+  ],
+  CW: [
+    { id:'q2', label:'2 quarters',  min:100000, max:250000, qtrs:2 },
+    { id:'q3', label:'3+ quarters', min:250000, max:null,   qtrs:3 },
+  ],
+};
+function bucketsFor(tier) { return BUCKETS[tier] || BUCKETS.QW; }
+function findBucket(tier, id) { return bucketsFor(tier).find(b => b.id === id) || bucketsFor(tier)[0]; }
+function bucketRangeLabel(b) { return b.max == null ? (fmt(b.min) + '+') : (fmt(b.min) + ' – ' + fmt(b.max)); }
+function clampToBucket(tier, bucketId, value) {
+  const b = findBucket(tier, bucketId);
+  let v = Number(value) || b.min;
+  if (v < b.min) v = b.min;
+  if (b.max != null && v > b.max) v = b.max;
+  return v;
+}
+
 // ─── STATE ─────────────────────────────────────────────────
 const S = {
   company: 'your company', contact: '', preparedBy: 'Lawrence McGlown', repEmail: 'lmcglown@augustodigital.com',
-  opps: [],   // { title, desc, tier:'QW'|'CW', timing:null|'now'|'next'|'later', cwQtrs:2 }
+  opps: [],   // { title, desc, tier:'QW'|'CW', bucket, price, cwQtrs, metPrice, metIncluded, timing, func }
   qwUC: [], cwUC: [],
-  qwRate: 25000, cwRate: 100000,
-  qwMERate: 30000,   // per 6-month period per QW
-  cwMERate: 60000,   // per 6-month period per CW
-  meEnabled: true,
-  paySchedule: null, // null | 'quarterly' | 'upfront'
 };
 const UPFRONT_DISCOUNT = 0.10;
 let dragSrc = null, oppCount = 0, oppIds = [], isLeadMode = false;
 
 // ─── HELPERS ───────────────────────────────────────────────
-function winQtrs(o)      { return o.tier === 'CW' ? (o.cwQtrs || 2) : 1; }
-function winQtrRate(o)   { return o.tier === 'QW' ? S.qwRate : S.cwRate; }
-function winBaseTotal(o) { return winQtrRate(o) * winQtrs(o); }
-function mePeriodRate(o) { return o.tier === 'QW' ? S.qwMERate : S.cwMERate; }
-function winMETotal(o)   { return S.meEnabled ? mePeriodRate(o) : 0; }
+function winQtrs(o)       { return o.tier === 'CW' ? (o.bucket === 'q3' ? Math.max(3, o.cwQtrs || 3) : 2) : 1; }
+function winPrice(o)      { return clampToBucket(o.tier, o.bucket, o.price); }
+function winPerQtr(o)     { return Math.round(winPrice(o) / winQtrs(o)); }
+function winMETPrice(o)   { return Number(o.metPrice) || 0; }
+function winMETIncluded(o){ return o.metIncluded !== false; }
+function winMETTotal(o)   { return winMETIncluded(o) ? winMETPrice(o) : 0; }
 function getByTiming(t)         { return S.opps.filter(o => o.timing === t); }
-function getTotalByTiming(t)    { return getByTiming(t).reduce((s,o) => s + winQtrRate(o), 0); }
-function getNowBaseTotal()      { return getByTiming('now').reduce((s,o) => s + winBaseTotal(o), 0); }
-function getNowMETotal()        { return getByTiming('now').reduce((s,o) => s + winMETotal(o), 0); }
+function getNowBaseTotal()      { return getByTiming('now').reduce((s,o) => s + winPrice(o), 0); }
+function getNowMETotal()        { return getByTiming('now').reduce((s,o) => s + winMETTotal(o), 0); }
 function getNowGrandTotal()     { return getNowBaseTotal() + getNowMETotal(); }
-function fmt(n) { return '$' + n.toLocaleString(); }
+function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
+function winPriceLabel(o) {
+  return o.tier === 'QW'
+    ? `${fmt(winPrice(o))} (1 quarter)`
+    : `${fmt(winPrice(o))} total (~${fmt(winPerQtr(o))}/qtr over ${winQtrs(o)} qtrs)`;
+}
 
 // ─── PROGRESS BAR ──────────────────────────────────────────
 const STEPS = [
@@ -629,10 +630,14 @@ function addOppField(pre = null) {
   const id = `opp-${oppCount}`;
   oppIds.push(id);
   const isCW  = pre && pre.tier === 'CW';
+  const tier  = isCW ? 'CW' : 'QW';
   const func  = pre && pre.func ? pre.func : 'Company';
+  const bucketId = pre && pre.bucket ? pre.bucket : bucketsFor(tier)[0].id;
+  const price = pre && pre.price != null ? pre.price : findBucket(tier, bucketId).min;
+  const metPrice = pre && pre.metPrice != null ? pre.metPrice : 0;
   const div = document.createElement('div');
   div.className = 'opp-admin-card'; div.id = id;
-  div.dataset.selectedTier = isCW ? 'CW' : 'QW';
+  div.dataset.selectedTier = tier;
   div.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
       <span style="font-size:12px;font-weight:700;color:var(--gray-400);">Opportunity ${oppIds.length}</span>
@@ -659,12 +664,63 @@ function addOppField(pre = null) {
         <button class="tier-toggle" data-tier="CW" onclick="pickTier(this)" style="flex:1;padding:9px;border-radius:6px;cursor:pointer;font-family:var(--font-primary);font-size:13px;font-weight:600;transition:all 0.15s;${isCW?'border:2px solid var(--teal);background:rgba(9,137,177,0.1);color:var(--teal)':'border:2px solid var(--gray-200);background:white;color:var(--gray-400)'}">Comprehensive Win</button>
       </div>
     </div>
-    <div class="admin-field cw-qtrs-field" style="margin-top:12px;margin-bottom:0;${!isCW?'display:none':''}">
-      <label class="admin-label">Estimated Quarters (min. 2)</label>
-      <input class="admin-input opp-cwqtrs-input" type="number" value="${pre && pre.cwQtrs ? pre.cwQtrs : 2}" min="2" max="16" step="1" placeholder="2">
-      <div style="font-size:11px;color:var(--gray-300);margin-top:4px;">Default: 2 quarters. Drives proposal investment total.</div>
+    <div class="admin-field" style="margin-top:12px;margin-bottom:0;">
+      <label class="admin-label">Win Delivered In</label>
+      <select class="admin-input opp-bucket-input" onchange="onBucketChange(this)"></select>
+      <div class="admin-note opp-bucket-note"></div>
+    </div>
+    <div class="admin-field cw-qtrs-field" style="margin-top:12px;margin-bottom:0;${!(isCW && bucketId==='q3')?'display:none':''}">
+      <label class="admin-label">Estimated Quarters (3 or more)</label>
+      <input class="admin-input opp-cwqtrs-input" type="number" value="${pre && pre.cwQtrs ? pre.cwQtrs : 3}" min="3" step="1" placeholder="3">
+    </div>
+    <div class="admin-field" style="margin-top:12px;margin-bottom:0;">
+      <label class="admin-label">Win Price</label>
+      <input class="admin-input opp-price-input" type="number" step="1000" value="${price}" onchange="onPriceChange(this)">
+      <div class="admin-note opp-price-note"></div>
+    </div>
+    <div class="admin-field" style="margin-top:12px;margin-bottom:0;">
+      <label class="admin-label">ME&amp;T Price (Maintenance, Evolution &amp; Training — per 6 months)</label>
+      <input class="admin-input opp-met-input" type="number" min="0" step="500" value="${metPrice}">
+      <div class="admin-note">Leave at 0 if this win has no ME&amp;T option. Otherwise, the lead can include/remove it in their plan.</div>
     </div>`;
   document.getElementById('opp-list').appendChild(div);
+  populateBucketOptions(div, tier, bucketId);
+}
+
+function populateBucketOptions(card, tier, selectedId) {
+  const sel = card.querySelector('.opp-bucket-input');
+  const buckets = bucketsFor(tier);
+  sel.innerHTML = buckets.map(b => `<option value="${b.id}"${b.id===selectedId?' selected':''}>${b.label} (${bucketRangeLabel(b)})</option>`).join('');
+  updateBucketNote(card, tier, selectedId);
+  const qtrsField = card.querySelector('.cw-qtrs-field');
+  if (qtrsField) qtrsField.style.display = (tier === 'CW' && selectedId === 'q3') ? 'block' : 'none';
+}
+
+function updateBucketNote(card, tier, bucketId) {
+  const b = findBucket(tier, bucketId);
+  card.querySelector('.opp-bucket-note').textContent = `Range: ${bucketRangeLabel(b)}`;
+  const priceInput = card.querySelector('.opp-price-input');
+  priceInput.min = b.min;
+  if (b.max != null) priceInput.max = b.max; else priceInput.removeAttribute('max');
+  card.querySelector('.opp-price-note').textContent = `Enforced range: ${bucketRangeLabel(b)}`;
+}
+
+function onBucketChange(selectEl) {
+  const card = selectEl.closest('.opp-admin-card');
+  const tier = card.dataset.selectedTier;
+  const bucketId = selectEl.value;
+  updateBucketNote(card, tier, bucketId);
+  const qtrsField = card.querySelector('.cw-qtrs-field');
+  if (qtrsField) qtrsField.style.display = (tier === 'CW' && bucketId === 'q3') ? 'block' : 'none';
+  const priceInput = card.querySelector('.opp-price-input');
+  priceInput.value = clampToBucket(tier, bucketId, priceInput.value);
+}
+
+function onPriceChange(inputEl) {
+  const card = inputEl.closest('.opp-admin-card');
+  const tier = card.dataset.selectedTier;
+  const bucketId = card.querySelector('.opp-bucket-input').value;
+  inputEl.value = clampToBucket(tier, bucketId, inputEl.value);
 }
 
 function removeOpp(id) { document.getElementById(id).remove(); oppIds = oppIds.filter(x => x !== id); }
@@ -680,8 +736,10 @@ function pickTier(btn) {
     btn.style.border = '2px solid var(--teal)'; btn.style.background = 'rgba(9,137,177,0.1)'; btn.style.color = 'var(--teal)';
   }
   card.dataset.selectedTier = btn.dataset.tier;
-  const qtrsField = card.querySelector('.cw-qtrs-field');
-  if (qtrsField) qtrsField.style.display = btn.dataset.tier === 'CW' ? 'block' : 'none';
+  const newBucketId = bucketsFor(btn.dataset.tier)[0].id;
+  populateBucketOptions(card, btn.dataset.tier, newBucketId);
+  const priceInput = card.querySelector('.opp-price-input');
+  priceInput.value = clampToBucket(btn.dataset.tier, newBucketId, priceInput.value);
 }
 
 function applyConfig() {
@@ -689,20 +747,21 @@ function applyConfig() {
   S.contact = document.getElementById('cfg-contact').value.trim();
   S.preparedBy = document.getElementById('cfg-preparedby').value.trim() || 'Lawrence McGlown';
   S.repEmail = document.getElementById('cfg-rep-email').value.trim() || 'lmcglown@augustodigital.com';
-  S.qwRate = parseInt(document.getElementById('cfg-qw-rate').value) || 25000;
-  S.cwRate = parseInt(document.getElementById('cfg-cw-rate').value) || 100000;
-  S.meEnabled = document.getElementById('svc-me').checked;
-  S.qwMERate = parseInt(document.getElementById('cfg-qw-me-rate').value) || 30000;
-  S.cwMERate = parseInt(document.getElementById('cfg-cw-me-rate').value) || 60000;
+  const prevOpps = S.opps;
   S.opps = [];
-  document.querySelectorAll('#opp-list .opp-admin-card').forEach(card => {
+  document.querySelectorAll('#opp-list .opp-admin-card').forEach((card, idx) => {
     const title = card.querySelector('.opp-title-input').value.trim();
     if (!title) return;
-    const desc   = card.querySelector('.opp-desc-input').value.trim();
-    const tier   = card.dataset.selectedTier || 'QW';
-    const cwQtrs = Math.max(2, parseInt(card.querySelector('.opp-cwqtrs-input').value) || 2);
-    const func   = card.querySelector('.opp-func-input').value || 'Company';
-    S.opps.push({ title, desc, tier, timing: null, cwQtrs, func });
+    const desc     = card.querySelector('.opp-desc-input').value.trim();
+    const tier     = card.dataset.selectedTier || 'QW';
+    const bucket   = card.querySelector('.opp-bucket-input').value;
+    const price    = clampToBucket(tier, bucket, card.querySelector('.opp-price-input').value);
+    const cwQtrs   = Math.max(3, parseInt(card.querySelector('.opp-cwqtrs-input').value) || 3);
+    const metPrice = Math.max(0, parseInt(card.querySelector('.opp-met-input').value) || 0);
+    const func     = card.querySelector('.opp-func-input').value || 'Company';
+    const existing = prevOpps[idx];
+    const metIncluded = existing && existing.title === title ? existing.metIncluded : true;
+    S.opps.push({ title, desc, tier, bucket, price, cwQtrs, metPrice, metIncluded, timing: null, func });
   });
   const qwRaw = document.getElementById('cfg-qw-usecases').value;
   S.qwUC = qwRaw ? qwRaw.split('\n').map(l => l.trim()).filter(Boolean) : [];
@@ -716,7 +775,7 @@ function applyConfig() {
 
 // ─── SCREEN 2: DRAG + PRIORITIZE ───────────────────────────
 function renderDragList() {
-  const opps = S.opps.length ? S.opps : [{ title:'Configure opportunities in Augusto Setup', desc:'Click ⚙ to add Rumble findings', tier:'QW', importance:null, inScope:true }];
+  const opps = S.opps.length ? S.opps : [{ title:'Configure opportunities in Augusto Setup', desc:'Click ⚙ to add Rumble findings', tier:'QW' }];
   const list = document.getElementById('opp-drag-list');
   list.innerHTML = '';
   opps.forEach((o, i) => {
@@ -782,6 +841,11 @@ function checkAllTimed() {
 }
 
 // ─── SCREEN 4: ENGAGEMENT PLAN ─────────────────────────────
+function toggleMET(idx, checked) {
+  S.opps[idx].metIncluded = checked;
+  renderEngagementPlan();
+}
+
 function renderEngagementPlan() {
   const nowWins   = getByTiming('now');
   const nextWins  = getByTiming('next');
@@ -790,17 +854,16 @@ function renderEngagementPlan() {
   function winRows(wins) {
     if (!wins.length) return `<div style="padding:20px;text-align:center;color:var(--gray-400);font-size:14px;">No wins assigned to this phase.</div>`;
     return wins.map(o => {
-      const qtrs = winQtrs(o);
-      const rate = winQtrRate(o);
-      const base = winBaseTotal(o);
+      const idx = S.opps.indexOf(o);
       const durationTag = o.tier === 'QW'
         ? `<span style="font-size:11px;color:var(--green-dark);font-weight:500;margin-left:8px;">1 quarter</span>`
-        : `<span style="font-size:11px;color:var(--teal);font-weight:500;margin-left:8px;">~${qtrs} quarters</span>`;
-      const meStart = winQtrs(o) + 1;
-      const meRow = S.meEnabled ? `
-        <div style="padding:9px 20px 9px 20px;background:rgba(9,137,177,0.04);border-top:1px dashed var(--gray-100);display:flex;justify-content:space-between;align-items:center;">
-          <div style="font-size:12px;color:var(--teal);padding-left:2px;">+ M&amp;E Bundle <span style="color:var(--gray-300)">(begins Q${meStart} · semi-annual)</span></div>
-          <div style="font-size:12px;font-weight:700;color:var(--teal);padding-right:2px;">${fmt(winMETotal(o))}<span style="font-size:10px;font-weight:400;">/6 mo</span></div>
+        : `<span style="font-size:11px;color:var(--teal);font-weight:500;margin-left:8px;">~${winQtrs(o)} quarters</span>`;
+      const hasMET = winMETPrice(o) > 0;
+      const included = winMETIncluded(o);
+      const metRow = hasMET ? `
+        <div class="met-row">
+          <label><input type="checkbox" ${included?'checked':''} onchange="toggleMET(${idx}, this.checked)"> ME&amp;T (Maintenance, Evolution &amp; Training) <span style="color:var(--gray-300)">— your choice to include</span></label>
+          <div style="font-size:12px;font-weight:700;color:var(--teal);">${fmt(winMETPrice(o))}<span style="font-size:10px;font-weight:400;">/6 mo</span></div>
         </div>` : '';
       return `
         <div class="plan-row" style="grid-template-columns:1fr 110px 120px;">
@@ -809,24 +872,24 @@ function renderEngagementPlan() {
             ${o.desc ? `<div class="pr-sub">${o.desc}</div>` : ''}
             <div class="pr-badges"><span class="tier-pill ${o.tier.toLowerCase()}">${o.tier==='QW'?'Quick Win':'Comprehensive Win'}</span>${o.func && o.func !== 'Company' ? `<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(104,108,118,0.08);color:var(--gray-400);border:1px solid var(--gray-100);">${o.func}</span>` : ''}</div>
           </div>
-          <div class="pr-price">${fmt(rate)}<span style="font-size:11px;font-weight:400;color:var(--gray-400)">/qtr</span></div>
-          <div class="pr-price">${fmt(base)}</div>
-        </div>${meRow}`;
+          <div class="pr-price">${fmt(winPerQtr(o))}<span style="font-size:11px;font-weight:400;color:var(--gray-400)">/qtr</span></div>
+          <div class="pr-price">${fmt(winPrice(o))}</div>
+        </div>${metRow}`;
     }).join('');
   }
 
   function bucketSection(label, cls, desc, wins, bgStyle) {
     if (!wins.length) return '';
-    const base = wins.reduce((s,o) => s + winBaseTotal(o), 0);
-    const me   = wins.reduce((s,o) => s + winMETotal(o), 0);
-    const meFooter = S.meEnabled && me > 0 ? `
+    const base = wins.reduce((s,o) => s + winPrice(o), 0);
+    const met  = wins.reduce((s,o) => s + winMETTotal(o), 0);
+    const metFooter = met > 0 ? `
       <div style="display:flex;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.15);">
-        <div style="font-size:12px;color:rgba(255,255,255,0.55);">M&amp;E Bundle (semi-annual)</div>
-        <div style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.8);">${fmt(me)}/6 mo</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.55);">ME&amp;T Bundle (included wins, semi-annual)</div>
+        <div style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.8);">${fmt(met)}/6 mo</div>
       </div>
       <div style="display:flex;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:2px solid rgba(255,255,255,0.2);">
-        <div style="font-size:12px;color:rgba(255,255,255,0.45);">Total investment (incl. M&amp;E)</div>
-        <div style="font-size:22px;font-weight:700;color:white;">${fmt(base + me)}</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.45);">Total investment (incl. ME&amp;T)</div>
+        <div style="font-size:22px;font-weight:700;color:white;">${fmt(base + met)}</div>
       </div>` : '';
     return `
       <div style="margin-bottom:16px;">
@@ -835,7 +898,7 @@ function renderEngagementPlan() {
           <div style="font-size:13px;color:var(--gray-400);">${desc}</div>
         </div>
         <div class="plan-table">
-          <div class="plan-table-head" style="grid-template-columns:1fr 110px 120px;"><div>Win</div><div class="plan-col-right">Per Qtr</div><div class="plan-col-right">Engagement Total</div></div>
+          <div class="plan-table-head" style="grid-template-columns:1fr 110px 120px;"><div>Win</div><div class="plan-col-right">Per Qtr (avg)</div><div class="plan-col-right">Win Price</div></div>
           ${winRows(wins)}
           <div class="plan-total" style="background:${bgStyle};">
             <div style="font-size:11px;color:rgba(255,255,255,0.55);margin-bottom:4px;">${wins.length} win${wins.length!==1?'s':''} · base engagement</div>
@@ -845,7 +908,7 @@ function renderEngagementPlan() {
                 <div class="plan-total-sub">total base${wins.some(o=>o.tier==='CW')?' across estimated quarters':''}</div>
               </div>
             </div>
-            ${meFooter}
+            ${metFooter}
           </div>
         </div>
       </div>`;
@@ -860,10 +923,13 @@ function renderEngagementPlan() {
   const cwUCItems = (S.cwUC.length ? S.cwUC : ['End-to-end client onboarding workflow','Predictive revenue intelligence platform','Multi-system AI integration layer','Custom AI model development','Organization-wide AI enablement program','Automated compliance monitoring'])
     .map(u => `<div class="ref-item">${u}</div>`).join('');
 
+  const qwMin = BUCKETS.QW[0].min, qwMax = BUCKETS.QW[BUCKETS.QW.length-1].max;
+  const cwMin = BUCKETS.CW[0].min;
+
   document.getElementById('plan-content').innerHTML = `
     <div class="section-label">Step 1 of 2 · Alignment</div>
     <h2>Your engagement plan</h2>
-    <p class="lead">Here's how your wins are structured across implementation phases. Now wins are billed on approval. Next and Later activate as each prior phase completes.</p>
+    <p class="lead">Here's how your wins are structured across implementation phases. Now wins are billed on approval. Next and Later activate as each prior phase completes. Where offered, you can include or remove the ME&amp;T bundle for each win.</p>
     ${nowSection}
     ${nextSection}
     ${laterSection || '<div style="margin-bottom:28px;"></div>'}
@@ -874,11 +940,11 @@ function renderEngagementPlan() {
       <div class="ref-body" id="ref-body">
         <div class="ref-grid">
           <div class="ref-card">
-            <div class="ref-title qw">Quick Win — 1 quarter · ${fmt(S.qwRate)} per win</div>
+            <div class="ref-title qw">Quick Win — 30–90 days · ${fmt(qwMin)}–${fmt(qwMax)} per win</div>
             ${qwUCItems}
           </div>
           <div class="ref-card">
-            <div class="ref-title cw">Comprehensive Win — 2+ quarters · ${fmt(S.cwRate)}/qtr per win</div>
+            <div class="ref-title cw">Comprehensive Win — 2+ quarters · ${fmt(cwMin)}+ per win</div>
             ${cwUCItems}
           </div>
         </div>
@@ -899,14 +965,13 @@ function toggleRef(btn) {
 // ─── SCREEN 5: PAYMENT SCHEDULE ────────────────────────────
 function renderPaymentSchedule() {
   const base     = getNowBaseTotal();
-  const meTotal  = getNowMETotal();
+  const metTotal = getNowMETotal();
   const upfront  = Math.round(base * (1 - UPFRONT_DISCOUNT));
   const savings  = base - upfront;
   const nowWins  = getByTiming('now');
   const hasCW    = nowWins.some(o => o.tier === 'CW');
   const termQtrs = nowWins.length ? Math.max(...nowWins.map(o => winQtrs(o))) : 1;
 
-  // Update lead copy
   const leadEl = document.getElementById('s5-lead');
   if (leadEl) {
     leadEl.textContent = hasCW
@@ -914,7 +979,6 @@ function renderPaymentSchedule() {
       : `Your Now wins each run for one quarter, invoiced once at activation. This is a fixed-term engagement with no automatic renewal.`;
   }
 
-  // Engagement term summary banner
   const termBanner = `
     <div style="grid-column:1/-1;display:flex;align-items:center;gap:16px;background:var(--navy-bg);border-radius:12px;padding:18px 24px;margin-bottom:4px;">
       <div style="font-size:34px;font-weight:700;color:var(--green);line-height:1;flex-shrink:0;">${termQtrs}</div>
@@ -929,15 +993,14 @@ function renderPaymentSchedule() {
     </div>`;
 
   if (!hasCW) {
-    // QW-only — single invoice at activation, auto-select
     document.getElementById('duration-grid').innerHTML = termBanner + `
       <div class="dur-card selected" id="dc-quarterly" onclick="selectPaySchedule('quarterly')" style="grid-column:1/-1;max-width:520px;">
         <div class="dur-title">Invoiced at Activation</div>
         <div class="dur-price">${fmt(base)}<span> total</span></div>
         <p class="dur-desc">Each Quick Win is invoiced once when it activates. Engagement is complete within one quarter.</p>
         <ul class="dur-list">
-          <li>${fmt(S.qwRate)} per Quick Win, invoiced at launch</li>
-          ${S.meEnabled ? `<li>M&amp;E invoiced separately — ${fmt(meTotal)}/6 months, semi-annual</li>` : ''}
+          <li>Each Quick Win invoiced in full at launch</li>
+          ${metTotal > 0 ? `<li>ME&amp;T (for included wins) invoiced separately — ${fmt(metTotal)}/6 months, semi-annual</li>` : ''}
           <li>Fixed 1-quarter term · No automatic renewal</li>
           <li>Either party may terminate with 30 days written notice</li>
         </ul>
@@ -945,11 +1008,10 @@ function renderPaymentSchedule() {
     S.paySchedule = 'quarterly';
     document.getElementById('btn-dur-next').disabled = false;
   } else {
-    // Has CWs — quarterly invoicing or single upfront payment
     const qtrBullets = [
-      `QWs invoiced ${fmt(S.qwRate)} at activation — 1 quarter`,
-      `CWs invoiced ${fmt(S.cwRate)}/quarter through their estimated term`,
-      S.meEnabled ? `M&amp;E invoiced separately — ${fmt(meTotal)}/6 months, semi-annual` : null,
+      `Quick Wins invoiced in full at activation — 1 quarter`,
+      `Comprehensive Wins invoiced across their estimated term`,
+      metTotal > 0 ? `ME&amp;T (for included wins) invoiced separately — ${fmt(metTotal)}/6 months, semi-annual` : null,
       `Fixed ${termQtrs}-quarter term · No automatic renewal`,
       `Either party may terminate with 30 days written notice`,
     ].filter(Boolean).map(t => `<li>${t}</li>`).join('');
@@ -957,7 +1019,7 @@ function renderPaymentSchedule() {
     const upfrontBullets = [
       `One invoice at signing covers your full ${termQtrs}-quarter engagement`,
       `Save ${fmt(savings)} — ${Math.round(UPFRONT_DISCOUNT*100)}% preferred rate`,
-      S.meEnabled ? `M&amp;E invoiced separately — ${fmt(meTotal)}/6 months, semi-annual` : null,
+      metTotal > 0 ? `ME&amp;T (for included wins) invoiced separately — ${fmt(metTotal)}/6 months, semi-annual` : null,
       `Fixed ${termQtrs}-quarter term · No automatic renewal`,
       `Either party may terminate with 30 days written notice`,
     ].filter(Boolean).map(t => `<li>${t}</li>`).join('');
@@ -982,14 +1044,15 @@ function renderPaymentSchedule() {
     }
   }
 
-  if (S.meEnabled && nowWins.length) {
+  const metWins = nowWins.filter(o => winMETIncluded(o) && winMETPrice(o) > 0);
+  if (metWins.length) {
     document.getElementById('evo-note').innerHTML = `
       <div style="margin-top:20px;">
-        <div style="font-size:13px;font-weight:700;color:var(--navy-text);margin-bottom:6px;">Maintenance &amp; Evolution Bundle</div>
-        <div style="font-size:13px;color:var(--gray-400);margin-bottom:14px;line-height:1.6;">M&amp;E begins after each win's build phase concludes and is invoiced semi-annually. This is a separate agreement from the base engagement — it continues at your election and can be cancelled with 30 days written notice.</div>
-        ${nowWins.map(o => {
+        <div style="font-size:13px;font-weight:700;color:var(--navy-text);margin-bottom:6px;">ME&amp;T Bundle (Maintenance, Evolution &amp; Training)</div>
+        <div style="font-size:13px;color:var(--gray-400);margin-bottom:14px;line-height:1.6;">ME&amp;T begins after each win's build phase concludes and is invoiced semi-annually. This is a separate agreement from the base engagement — it continues at your election and can be cancelled with 30 days written notice.</div>
+        ${metWins.map(o => {
           const meSt  = winQtrs(o) + 1;
-          const rate  = mePeriodRate(o);
+          const rate  = winMETPrice(o);
           const rows  = [1,2,3].map(n => {
             const endQ = meSt + (n * 2) - 1;
             return `<div style="display:flex;align-items:baseline;gap:14px;font-size:14px;margin-bottom:6px;">
@@ -1003,7 +1066,7 @@ function renderPaymentSchedule() {
               <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
                 <span style="font-size:14px;font-weight:600;color:var(--navy-text);">${o.title}</span>
                 <span class="tier-pill ${o.tier.toLowerCase()}">${o.tier === 'QW' ? 'Quick Win' : 'Comprehensive Win'}</span>
-                <span style="font-size:10px;color:var(--teal);font-weight:700;padding:2px 8px;background:rgba(9,137,177,0.08);border-radius:10px;margin-left:auto;">M&amp;E begins Q${meSt}</span>
+                <span style="font-size:10px;color:var(--teal);font-weight:700;padding:2px 8px;background:rgba(9,137,177,0.08);border-radius:10px;margin-left:auto;">ME&amp;T begins Q${meSt}</span>
               </div>
               ${rows}
               <div style="font-size:11px;color:var(--gray-300);margin-top:4px;padding-top:8px;border-top:1px dashed var(--gray-100);">${fmt(rate)}/period · semi-annual · continues at your election</div>
@@ -1012,7 +1075,7 @@ function renderPaymentSchedule() {
       </div>`;
   } else {
     document.getElementById('evo-note').innerHTML = `<div class="info-box" style="margin-top:16px;margin-bottom:0;">
-      <strong>Maintenance &amp; Evolution Bundle</strong> is an optional semi-annual maintenance agreement (QW: ${fmt(S.qwMERate)}/6 months · CW: ${fmt(S.cwMERate)}/6 months per win). Ask your Augusto team to include it in your Statement of Work.
+      <strong>ME&amp;T Bundle</strong> (Maintenance, Evolution &amp; Training) is an optional semi-annual add-on, priced per win by your Augusto team and toggled on or off per win in your engagement plan.
     </div>`;
   }
 }
@@ -1030,7 +1093,7 @@ function renderSummary() {
   const nextWins  = getByTiming('next');
   const laterWins = getByTiming('later');
   const base    = getNowBaseTotal();
-  const meTotal = getNowMETotal();
+  const metTotal = getNowMETotal();
   const price   = S.paySchedule === 'upfront' ? Math.round(base * (1 - UPFRONT_DISCOUNT)) : base;
   const savings = base - Math.round(base * (1 - UPFRONT_DISCOUNT));
   document.getElementById('summary-box').innerHTML = `
@@ -1041,7 +1104,7 @@ function renderSummary() {
     <div class="summary-row"><div class="s-label">Payment</div><div class="s-value">${S.paySchedule === 'upfront' ? 'Pay upfront (10% discount)' : 'Quarterly, as delivered'}</div></div>
     <div class="summary-row"><div class="s-label">Base engagement — Now wins</div><div class="s-value big">${fmt(price)}</div></div>
     ${S.paySchedule === 'upfront' ? `<div class="summary-row"><div class="s-label">Savings</div><div class="s-value green">${fmt(savings)} preferred rate discount</div></div>` : ''}
-    ${S.meEnabled ? `<div class="summary-row"><div class="s-label">M&amp;E Bundle (billed semi-annually)</div><div class="s-value green">${fmt(meTotal)}/6 months</div></div>` : ''}`;
+    ${metTotal > 0 ? `<div class="summary-row"><div class="s-label">ME&amp;T Bundle (billed semi-annually)</div><div class="s-value green">${fmt(metTotal)}/6 months</div></div>` : ''}`;
 }
 
 // ─── SCREEN 7: LOI ─────────────────────────────────────────
@@ -1050,7 +1113,7 @@ function renderLOI() {
   const nextWins  = getByTiming('next');
   const laterWins = getByTiming('later');
   const base    = getNowBaseTotal();
-  const meTotal = getNowMETotal();
+  const metTotal = getNowMETotal();
   const price   = S.paySchedule === 'upfront' ? Math.round(base * (1 - UPFRONT_DISCOUNT)) : base;
   const savings = base - Math.round(base * (1 - UPFRONT_DISCOUNT));
   const today   = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
@@ -1065,19 +1128,18 @@ function renderLOI() {
     <tr><td>Payment</td><td>${S.paySchedule === 'upfront' ? 'Upfront — full engagement at preferred rate (10% discount)' : 'Quarterly, billed as delivered'}</td></tr>
     <tr><td>Estimated start</td><td>Within 30 days of signed agreement</td></tr>`;
 
+  const metScopeWins = nowWins.filter(o => winMETIncluded(o) && winMETPrice(o) > 0);
   document.getElementById('loi-scope').innerHTML = `
     <p>Augusto Digital will activate AI capabilities across the following opportunities, organized by implementation phase:</p>
-    ${nowWins.length ? `<p><strong>Now (Immediate Activation):</strong></p><ul>${nowWins.map(o=>`<li><strong>${o.title}</strong>${o.desc?' — '+o.desc:''} — ${fmt(winQtrRate(o))}/qtr${o.tier==='CW'?`, ~${winQtrs(o)} quarter${winQtrs(o)!==1?'s':''} estimated`:`, 1 quarter`}</li>`).join('')}</ul>` : ''}
+    ${nowWins.length ? `<p><strong>Now (Immediate Activation):</strong></p><ul>${nowWins.map(o=>`<li><strong>${o.title}</strong>${o.desc?' — '+o.desc:''} — ${winPriceLabel(o)}</li>`).join('')}</ul>` : ''}
     ${nextWins.length ? `<p><strong>Next (Following Now Completion):</strong></p><ul>${nextWins.map(o=>`<li><strong>${o.title}</strong>${o.desc?' — '+o.desc:''}</li>`).join('')}</ul>` : ''}
     ${laterWins.length ? `<p><strong>Later (Future Phase):</strong></p><ul>${laterWins.map(o=>`<li><strong>${o.title}</strong>${o.desc?' — '+o.desc:''}</li>`).join('')}</ul>` : ''}
-    ${S.meEnabled ? `<p>A <strong>Maintenance &amp; Evolution Bundle</strong> is included, billed semi-annually and beginning after each win's build phase concludes — ${nowWins.map(o=>`${o.title}: ${fmt(mePeriodRate(o))}/6 mo beginning Q${winQtrs(o)+1}`).join('; ')}. This is a separate, ongoing agreement from the base engagement.</p>` : ''}`;
+    ${metScopeWins.length ? `<p>A <strong>ME&amp;T Bundle</strong> (Maintenance, Evolution &amp; Training) is included for the following wins, billed semi-annually and beginning after each win's build phase concludes — ${metScopeWins.map(o=>`${o.title}: ${fmt(winMETPrice(o))}/6 mo beginning Q${winQtrs(o)+1}`).join('; ')}. This is a separate, ongoing agreement from the base engagement.</p>` : ''}`;
 
   const nowInvRows = nowWins.map(o => {
-    const base1 = winBaseTotal(o);
-    const qtrs1 = winQtrs(o);
     const meSt  = winQtrs(o) + 1;
-    const meRow = S.meEnabled ? `<tr><td style="padding-left:18px;color:var(--teal);font-size:13px;">↳ M&amp;E Bundle <span style="color:var(--gray-300);font-size:11px;">(begins Q${meSt})</span></td><td style="color:var(--teal);">${fmt(winMETotal(o))}/6 mo</td></tr>` : '';
-    return `<tr><td>${o.title} <span style="color:var(--gray-300);font-size:12px;">${o.tier==='QW'?'(QW · 1 qtr)':'(CW · ~'+qtrs1+' qtrs)'}</span></td><td style="font-weight:600;color:var(--navy-text);">${fmt(winQtrRate(o))}/qtr × ${qtrs1} = ${fmt(base1)}</td></tr>${meRow}`;
+    const metRow = (winMETIncluded(o) && winMETPrice(o) > 0) ? `<tr><td style="padding-left:18px;color:var(--teal);font-size:13px;">↳ ME&amp;T Bundle <span style="color:var(--gray-300);font-size:11px;">(begins Q${meSt})</span></td><td style="color:var(--teal);">${fmt(winMETPrice(o))}/6 mo</td></tr>` : '';
+    return `<tr><td>${o.title} <span style="color:var(--gray-300);font-size:12px;">${o.tier==='QW'?'(QW · 1 qtr)':'(CW · ~'+winQtrs(o)+' qtrs)'}</span></td><td style="font-weight:600;color:var(--navy-text);">${winPriceLabel(o)}</td></tr>${metRow}`;
   }).join('');
 
   document.getElementById('loi-investment').innerHTML = `
@@ -1087,24 +1149,24 @@ function renderLOI() {
     ${S.paySchedule === 'upfront' ? `
     <tr><td>Preferred Rate Discount (${Math.round(UPFRONT_DISCOUNT*100)}%)</td><td style="color:var(--green-dark);">−${fmt(savings)}</td></tr>
     <tr><td style="font-weight:700;">Discounted Total</td><td style="font-size:17px;font-weight:700;color:var(--green-dark);">${fmt(price)}</td></tr>` : ''}
-    ${S.meEnabled ? `
-    <tr><td colspan="2" style="font-weight:700;color:var(--teal);padding-top:16px;padding-bottom:6px;">Maintenance &amp; Evolution Bundle — begins after build</td></tr>
-    ${nowWins.map(o => {
+    ${metScopeWins.length ? `
+    <tr><td colspan="2" style="font-weight:700;color:var(--teal);padding-top:16px;padding-bottom:6px;">ME&amp;T Bundle — begins after build</td></tr>
+    ${metScopeWins.map(o => {
       const meSt = winQtrs(o) + 1;
-      const rate = mePeriodRate(o);
+      const rate = winMETPrice(o);
       const periodRows = [1,2,3].map(n => {
         const endQ = meSt + (n * 2) - 1;
         return `<tr><td style="padding-left:18px;font-size:13px;color:var(--gray-400);">${n}x = ${fmt(n * rate)}</td><td style="font-size:13px;color:var(--teal);">covering Q${meSt} – Q${endQ}</td></tr>`;
       }).join('');
       return `<tr><td style="padding-top:4px;font-size:13px;font-weight:600;color:var(--navy-text);">${o.title} <span style="color:var(--gray-300);font-weight:400;">— begins Q${meSt} · ${fmt(rate)}/period</span></td><td></td></tr>${periodRows}`;
     }).join('')}
-    <tr><td style="font-weight:700;padding-top:10px;">M&amp;E per 6-month period (all wins)</td><td style="font-weight:700;color:var(--teal);padding-top:10px;">${fmt(meTotal)}/6 mo</td></tr>` : ''}
+    <tr><td style="font-weight:700;padding-top:10px;">ME&amp;T per 6-month period (included wins)</td><td style="font-weight:700;color:var(--teal);padding-top:10px;">${fmt(metTotal)}/6 mo</td></tr>` : ''}
     ${nextWins.length ? `
     <tr><td colspan="2" style="font-weight:700;color:var(--navy-text);padding-top:16px;padding-bottom:6px;">Next — Activated After Now</td></tr>
-    ${nextWins.map(o=>`<tr><td>${o.title}</td><td style="color:var(--gray-400);">${fmt(winQtrRate(o))}/qtr × ~${winQtrs(o)} qtrs = ${fmt(winBaseTotal(o))}</td></tr>`).join('')}` : ''}
+    ${nextWins.map(o=>`<tr><td>${o.title}</td><td style="color:var(--gray-400);">${winPriceLabel(o)}</td></tr>`).join('')}` : ''}
     ${laterWins.length ? `
     <tr><td colspan="2" style="font-weight:700;color:var(--navy-text);padding-top:16px;padding-bottom:6px;">Later — Future Phase</td></tr>
-    ${laterWins.map(o=>`<tr><td>${o.title}</td><td style="color:var(--gray-400);">${fmt(winQtrRate(o))}/qtr × ~${winQtrs(o)} qtrs = ${fmt(winBaseTotal(o))}</td></tr>`).join('')}` : ''}
+    ${laterWins.map(o=>`<tr><td>${o.title}</td><td style="color:var(--gray-400);">${winPriceLabel(o)}</td></tr>`).join('')}` : ''}
     <tr><td style="padding-top:14px;">Invoicing</td><td style="padding-top:14px;">${S.paySchedule === 'upfront' ? 'Single invoice at signing — full engagement, preferred rate' : 'Invoiced at the start of each quarter through the engagement term'}</td></tr>
     <tr><td>Renewal</td><td>None — fixed-term engagement. Terminable with 30 days written notice.</td></tr>`;
 }
@@ -1117,18 +1179,17 @@ function checkSig() {
 function submitLOI() {
   const base    = getNowBaseTotal();
   const price   = S.paySchedule === 'upfront' ? Math.round(base * (1 - UPFRONT_DISCOUNT)) : base;
-  const meTotal = getNowMETotal();
+  const metTotal = getNowMETotal();
   const nowWins = getByTiming('now');
   const rec = {
     ts: new Date().toISOString(), company: S.company, contact: S.contact,
-    paySchedule: S.paySchedule, baseTotal: price, meTotal,
-    opps: S.opps.map(o=>({title:o.title,tier:o.tier,timing:o.timing,cwQtrs:o.cwQtrs})),
+    paySchedule: S.paySchedule, baseTotal: price, metTotal,
+    opps: S.opps.map(o=>({title:o.title,tier:o.tier,bucket:o.bucket,timing:o.timing,cwQtrs:o.cwQtrs,price:o.price,metPrice:o.metPrice,metIncluded:o.metIncluded})),
     sigName: document.getElementById('sig-name').value,
     sigTitle: document.getElementById('sig-title').value,
     sigDate: document.getElementById('sig-date').value
   };
   try { const log=JSON.parse(localStorage.getItem('augusto_loi')||'[]'); log.push(rec); localStorage.setItem('augusto_loi',JSON.stringify(log)); } catch(e){}
-  // Notify rep via email when lead submits in lead mode
   if (isLeadMode && S.repEmail) {
     const sigName  = document.getElementById('sig-name').value;
     const sigTitle = document.getElementById('sig-title').value;
@@ -1145,18 +1206,18 @@ function submitLOI() {
       `Date:         ${sigDate}`,
       '',
       'NOW WINS:',
-      ...nowWins.map(o => `  • ${o.title} (${o.tier === 'QW' ? 'Quick Win · 1 qtr' : 'Comp. Win · ~' + winQtrs(o) + ' qtrs'}) — ${fmt(winBaseTotal(o))}`),
+      ...nowWins.map(o => `  • ${o.title} (${o.tier === 'QW' ? 'Quick Win · 1 qtr' : 'Comp. Win · ~' + winQtrs(o) + ' qtrs'}) — ${fmt(winPrice(o))}`),
       '',
       `Base Total:   ${fmt(price)}${S.paySchedule === 'upfront' ? ' (upfront, 10% discount)' : ' (quarterly billing)'}`,
     ];
-    if (S.meEnabled) bodyLines.push(`M&E Bundle:   ${fmt(meTotal)}/6 months`);
+    if (metTotal > 0) bodyLines.push(`ME&T Bundle:  ${fmt(metTotal)}/6 months`);
     bodyLines.push('', 'Follow up within 1 business day to activate the engagement.');
     const subject = encodeURIComponent(`LOI Received — ${S.company}`);
     const body    = encodeURIComponent(bodyLines.join('\n'));
     setTimeout(() => { window.location.href = `mailto:${S.repEmail}?subject=${subject}&body=${body}`; }, 400);
   }
   document.getElementById('confirm-summary').textContent =
-    `${nowWins.length} Now win${nowWins.length!==1?'s':''} · ${fmt(price)} base${S.meEnabled?' + M&E':''} · ${S.paySchedule === 'upfront' ? 'Upfront' : 'Quarterly'}`;
+    `${nowWins.length} Now win${nowWins.length!==1?'s':''} · ${fmt(price)} base${metTotal>0?' + ME&T':''} · ${S.paySchedule === 'upfront' ? 'Upfront' : 'Quarterly'}`;
   goTo(8);
 }
 
@@ -1166,24 +1227,22 @@ function generateLeadLink() {
   const contact    = document.getElementById('cfg-contact').value.trim();
   const preparedBy = document.getElementById('cfg-preparedby').value.trim() || 'Lawrence McGlown';
   const repEmail   = document.getElementById('cfg-rep-email').value.trim() || 'lmcglown@augustodigital.com';
-  const qwRate     = parseInt(document.getElementById('cfg-qw-rate').value) || 25000;
-  const cwRate     = parseInt(document.getElementById('cfg-cw-rate').value) || 100000;
-  const meEnabled  = document.getElementById('svc-me').checked;
-  const qwMERate   = parseInt(document.getElementById('cfg-qw-me-rate').value) || 30000;
-  const cwMERate   = parseInt(document.getElementById('cfg-cw-me-rate').value) || 60000;
   const opps = [];
   document.querySelectorAll('#opp-list .opp-admin-card').forEach(card => {
     const title = card.querySelector('.opp-title-input').value.trim();
     if (!title) return;
-    const desc   = card.querySelector('.opp-desc-input').value.trim();
-    const tier   = card.dataset.selectedTier || 'QW';
-    const cwQtrs = Math.max(2, parseInt(card.querySelector('.opp-cwqtrs-input').value) || 2);
-    const func   = card.querySelector('.opp-func-input').value || 'Company';
-    opps.push({ title, desc, tier, cwQtrs, func, timing: null });
+    const desc     = card.querySelector('.opp-desc-input').value.trim();
+    const tier     = card.dataset.selectedTier || 'QW';
+    const bucket   = card.querySelector('.opp-bucket-input').value;
+    const price    = clampToBucket(tier, bucket, card.querySelector('.opp-price-input').value);
+    const cwQtrs   = Math.max(3, parseInt(card.querySelector('.opp-cwqtrs-input').value) || 3);
+    const metPrice = Math.max(0, parseInt(card.querySelector('.opp-met-input').value) || 0);
+    const func     = card.querySelector('.opp-func-input').value || 'Company';
+    opps.push({ title, desc, tier, bucket, price, cwQtrs, metPrice, metIncluded: true, func, timing: null });
   });
   const qwUC = (document.getElementById('cfg-qw-usecases').value || '').split('\n').map(l => l.trim()).filter(Boolean);
   const cwUC = (document.getElementById('cfg-cw-usecases').value || '').split('\n').map(l => l.trim()).filter(Boolean);
-  const cfg = { company, contact, preparedBy, repEmail, qwRate, cwRate, meEnabled, qwMERate, cwMERate, opps, qwUC, cwUC };
+  const cfg = { company, contact, preparedBy, repEmail, opps, qwUC, cwUC };
   try {
     const encoded = btoa(encodeURIComponent(JSON.stringify(cfg)));
     const url = location.origin + location.pathname + '?c=' + encoded;
@@ -1216,7 +1275,6 @@ function copyLeadLink() {
 
 // ─── INIT ──────────────────────────────────────────────────
 (function init() {
-  // ── Lead mode: decode config from URL ──────────────────────
   try {
     const params = new URLSearchParams(location.search);
     const cfgStr = params.get('c');
@@ -1224,20 +1282,18 @@ function copyLeadLink() {
       const parsed = JSON.parse(decodeURIComponent(atob(cfgStr)));
       Object.assign(S, parsed);
       isLeadMode = true;
-      // Hide admin setup button(s)
       document.querySelectorAll('button[onclick="toggleAdmin()"]').forEach(el => el.style.display = 'none');
     }
   } catch(e) { console.warn('Lead config parse error:', e); }
 
   if (!isLeadMode) {
-    // Pre-populated example opportunities (rep/demo mode)
     S.opps = [
-      { title: 'AI-assisted email & proposal drafting', desc: 'Draft client-ready emails and proposals from notes in seconds', tier: 'QW', timing: null, cwQtrs: 2, func: 'Sales' },
-      { title: 'Automated meeting summaries', desc: 'Auto-generate, format, and distribute structured meeting notes', tier: 'QW', timing: null, cwQtrs: 2, func: 'Company' },
-      { title: 'Intelligent document extraction', desc: 'Extract structured data from contracts, forms, and reports', tier: 'QW', timing: null, cwQtrs: 2, func: 'Operations' },
-      { title: 'Lead qualification & scoring', desc: 'Automate lead scoring using CRM and behavioral signals', tier: 'QW', timing: null, cwQtrs: 2, func: 'Sales' },
-      { title: 'End-to-end client onboarding workflow', desc: 'AI-driven activation from signed contract through kickoff', tier: 'CW', timing: null, cwQtrs: 2, func: 'Operations' },
-      { title: 'Predictive revenue intelligence', desc: 'Forecast pipeline health and flag at-risk accounts 60 days out', tier: 'CW', timing: null, cwQtrs: 3, func: 'Sales' },
+      { title: 'AI-assisted email & proposal drafting', desc: 'Draft client-ready emails and proposals from notes in seconds', tier: 'QW', bucket: 'd30', price: 32000, cwQtrs: 3, metPrice: 8000, metIncluded: true, timing: null, func: 'Sales' },
+      { title: 'Automated meeting summaries', desc: 'Auto-generate, format, and distribute structured meeting notes', tier: 'QW', bucket: 'd30', price: 28000, cwQtrs: 3, metPrice: 6000, metIncluded: true, timing: null, func: 'Company' },
+      { title: 'Intelligent document extraction', desc: 'Extract structured data from contracts, forms, and reports', tier: 'QW', bucket: 'd60', price: 48000, cwQtrs: 3, metPrice: 10000, metIncluded: true, timing: null, func: 'Operations' },
+      { title: 'Lead qualification & scoring', desc: 'Automate lead scoring using CRM and behavioral signals', tier: 'QW', bucket: 'd60', price: 52000, cwQtrs: 3, metPrice: 9000, metIncluded: true, timing: null, func: 'Sales' },
+      { title: 'End-to-end client onboarding workflow', desc: 'AI-driven activation from signed contract through kickoff', tier: 'CW', bucket: 'q2', price: 150000, cwQtrs: 2, metPrice: 30000, metIncluded: true, timing: null, func: 'Operations' },
+      { title: 'Predictive revenue intelligence', desc: 'Forecast pipeline health and flag at-risk accounts 60 days out', tier: 'CW', bucket: 'q3', price: 275000, cwQtrs: 3, metPrice: 45000, metIncluded: true, timing: null, func: 'Sales' },
     ];
     S.qwUC = [
       'AI-assisted email & proposal drafting',
@@ -1257,11 +1313,9 @@ function copyLeadLink() {
       'Organization-wide AI enablement program',
       'Automated regulatory compliance monitoring',
     ];
-    // Pre-fill admin panel fields
     S.opps.forEach(o => addOppField(o));
     document.getElementById('cfg-qw-usecases').value = S.qwUC.join('\n');
     document.getElementById('cfg-cw-usecases').value = S.cwUC.join('\n');
-    document.getElementById('svc-me').checked = S.meEnabled;
   }
 
   document.getElementById('welcome-company').textContent = S.company;
