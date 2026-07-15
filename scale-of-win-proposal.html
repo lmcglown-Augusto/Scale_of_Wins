@@ -277,41 +277,6 @@ h2 { font-family: var(--font-display); font-size: 36px; font-weight: 400; color:
 </head>
 <body>
 
-<!-- CHROME BANNER -->
-<div id="chrome-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(177,128,34,0.10);border-bottom:2px solid #B18022;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:'Barlow',system-ui,sans-serif;font-size:13px;color:#7A5816;">
-  <span>⚠ This experience is optimized for <strong>Google Chrome</strong>. You appear to be using a different browser — some features may not display correctly.</span>
-  <div style="display:flex;gap:10px;flex-shrink:0;">
-    <a href="#" onclick="openInChrome(event)" style="background:#B18022;color:white;padding:6px 14px;border-radius:6px;font-weight:600;text-decoration:none;font-size:12px;">How to open in Chrome</a>
-    <button onclick="document.getElementById('chrome-banner').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:18px;color:#7A5816;line-height:1;">✕</button>
-  </div>
-</div>
-<div id="chrome-howto" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:10000;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;">
-  <div style="background:white;border-radius:14px;padding:36px;max-width:440px;width:90%;font-family:'Barlow',system-ui,sans-serif;">
-    <div style="font-size:22px;font-weight:700;color:#0E1E2B;margin-bottom:8px;">Open in Chrome</div>
-    <div style="font-size:14px;color:#686C76;line-height:1.7;margin-bottom:20px;">Copy the address from your browser's address bar and paste it into Google Chrome, or right-click the file and choose <em>"Open with → Google Chrome"</em>.</div>
-    <div style="background:#F1F3F5;border-radius:8px;padding:12px 16px;font-size:12px;color:#686C76;margin-bottom:20px;word-break:break-all;" id="current-url"></div>
-    <div style="display:flex;gap:10px;">
-      <button onclick="navigator.clipboard&&navigator.clipboard.writeText(location.href);this.textContent='Copied!'" style="background:#22B161;color:white;border:none;padding:10px 20px;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;flex:1;">Copy URL</button>
-      <button onclick="document.getElementById('chrome-howto').style.display='none'" style="background:none;border:2px solid #C2C8CC;padding:10px 20px;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;color:#0E1E2B;">Close</button>
-    </div>
-  </div>
-</div>
-<script>
-(function detectBrowser(){
-  const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-  if (!isChrome) {
-    document.getElementById('chrome-banner').style.display = 'flex';
-    document.getElementById('current-url').textContent = location.href;
-    document.body.style.paddingTop = '48px';
-  }
-})();
-function openInChrome(e) {
-  e.preventDefault();
-  const d = document.getElementById('chrome-howto');
-  d.style.display = 'flex';
-}
-</script>
-
 <!-- LEAD LINK MODAL -->
 <div id="lead-link-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:10001;align-items:center;justify-content:center;">
   <div style="background:white;border-radius:14px;padding:36px;max-width:520px;width:90%;font-family:'Barlow',system-ui,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
@@ -555,13 +520,12 @@ const S = {
   opps: [],   // { title, desc, tier:'QW'|'CW', bucket, price, cwQtrs, metPrice, metIncluded, timing, func }
   qwUC: [], cwUC: [],
 };
-const UPFRONT_DISCOUNT = 0.10;
+const UPFRONT_DISCOUNT = 0.05;
 let dragSrc = null, oppCount = 0, oppIds = [], isLeadMode = false;
 
 // ─── HELPERS ───────────────────────────────────────────────
 function winQtrs(o)       { return o.tier === 'CW' ? (o.bucket === 'q3' ? Math.max(3, o.cwQtrs || 3) : 2) : 1; }
 function winPrice(o)      { return clampToBucket(o.tier, o.bucket, o.price); }
-function winPerQtr(o)     { return Math.round(winPrice(o) / winQtrs(o)); }
 function winMETPrice(o)   { return Number(o.metPrice) || 0; }
 function winMETIncluded(o){ return o.metIncluded !== false; }
 function winMETTotal(o)   { return winMETIncluded(o) ? winMETPrice(o) : 0; }
@@ -572,8 +536,8 @@ function getNowGrandTotal()     { return getNowBaseTotal() + getNowMETotal(); }
 function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
 function winPriceLabel(o) {
   return o.tier === 'QW'
-    ? `${fmt(winPrice(o))} (1 quarter)`
-    : `${fmt(winPrice(o))} total (~${fmt(winPerQtr(o))}/qtr over ${winQtrs(o)} qtrs)`;
+    ? `${fmt(winPrice(o))} (fixed bid)`
+    : `${fmt(winPrice(o))} (fixed bid, ~${winQtrs(o)} quarters)`;
 }
 
 // ─── PROGRESS BAR ──────────────────────────────────────────
@@ -866,13 +830,12 @@ function renderEngagementPlan() {
           <div style="font-size:12px;font-weight:700;color:var(--teal);">${fmt(winMETPrice(o))}<span style="font-size:10px;font-weight:400;">/6 mo</span></div>
         </div>` : '';
       return `
-        <div class="plan-row" style="grid-template-columns:1fr 110px 120px;">
+        <div class="plan-row" style="grid-template-columns:1fr 140px;">
           <div>
             <div class="pr-title">${o.title}${durationTag}</div>
             ${o.desc ? `<div class="pr-sub">${o.desc}</div>` : ''}
             <div class="pr-badges"><span class="tier-pill ${o.tier.toLowerCase()}">${o.tier==='QW'?'Quick Win':'Comprehensive Win'}</span>${o.func && o.func !== 'Company' ? `<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(104,108,118,0.08);color:var(--gray-400);border:1px solid var(--gray-100);">${o.func}</span>` : ''}</div>
           </div>
-          <div class="pr-price">${fmt(winPerQtr(o))}<span style="font-size:11px;font-weight:400;color:var(--gray-400)">/qtr</span></div>
           <div class="pr-price">${fmt(winPrice(o))}</div>
         </div>${metRow}`;
     }).join('');
@@ -898,7 +861,7 @@ function renderEngagementPlan() {
           <div style="font-size:13px;color:var(--gray-400);">${desc}</div>
         </div>
         <div class="plan-table">
-          <div class="plan-table-head" style="grid-template-columns:1fr 110px 120px;"><div>Win</div><div class="plan-col-right">Per Qtr (avg)</div><div class="plan-col-right">Win Price</div></div>
+          <div class="plan-table-head" style="grid-template-columns:1fr 140px;"><div>Win</div><div class="plan-col-right">Investment</div></div>
           ${winRows(wins)}
           <div class="plan-total" style="background:${bgStyle};">
             <div style="font-size:11px;color:rgba(255,255,255,0.55);margin-bottom:4px;">${wins.length} win${wins.length!==1?'s':''} · base engagement</div>
@@ -968,6 +931,9 @@ function renderPaymentSchedule() {
   const metTotal = getNowMETotal();
   const upfront  = Math.round(base * (1 - UPFRONT_DISCOUNT));
   const savings  = base - upfront;
+  const stage1   = Math.round(base * 0.4);
+  const stage2   = Math.round(base * 0.2);
+  const stage3   = base - stage1 - stage2;
   const nowWins  = getByTiming('now');
   const hasCW    = nowWins.some(o => o.tier === 'CW');
   const termQtrs = nowWins.length ? Math.max(...nowWins.map(o => winQtrs(o))) : 1;
@@ -975,8 +941,8 @@ function renderPaymentSchedule() {
   const leadEl = document.getElementById('s5-lead');
   if (leadEl) {
     leadEl.textContent = hasCW
-      ? `Your Now engagement runs for up to ${termQtrs} quarter${termQtrs !== 1 ? 's' : ''}, launching upon approval. Choose how you'd like to be invoiced for this fixed-term engagement.`
-      : `Your Now wins each run for one quarter, invoiced once at activation. This is a fixed-term engagement with no automatic renewal.`;
+      ? `Your Now engagement runs for up to ${termQtrs} quarter${termQtrs !== 1 ? 's' : ''}, launching upon approval. Choose how you'd like to be invoiced for this fixed-bid engagement.`
+      : `Your Now wins are fixed bids, launching upon approval. Choose how you'd like to be invoiced.`;
   }
 
   const termBanner = `
@@ -992,56 +958,44 @@ function renderPaymentSchedule() {
       </div>
     </div>`;
 
-  if (!hasCW) {
-    document.getElementById('duration-grid').innerHTML = termBanner + `
-      <div class="dur-card selected" id="dc-quarterly" onclick="selectPaySchedule('quarterly')" style="grid-column:1/-1;max-width:520px;">
-        <div class="dur-title">Invoiced at Activation</div>
-        <div class="dur-price">${fmt(base)}<span> total</span></div>
-        <p class="dur-desc">Each Quick Win is invoiced once when it activates. Engagement is complete within one quarter.</p>
-        <ul class="dur-list">
-          <li>Each Quick Win invoiced in full at launch</li>
-          ${metTotal > 0 ? `<li>ME&amp;T (for included wins) invoiced separately — ${fmt(metTotal)}/6 months, semi-annual</li>` : ''}
-          <li>Fixed 1-quarter term · No automatic renewal</li>
-          <li>Either party may terminate with 30 days written notice</li>
-        </ul>
-      </div>`;
-    S.paySchedule = 'quarterly';
-    document.getElementById('btn-dur-next').disabled = false;
+  const metBullet = metTotal > 0 ? `ME&amp;T (for included wins) invoiced separately — ${fmt(metTotal)}/6 months, semi-annual` : null;
+
+  const upfrontBullets = [
+    `One invoice at signing — ${fmt(upfront)}`,
+    `Save ${fmt(savings)} — ${Math.round(UPFRONT_DISCOUNT*100)}% preferred rate`,
+    metBullet,
+    `Fixed-bid engagement · No automatic renewal`,
+    `Either party may terminate with 30 days written notice`,
+  ].filter(Boolean).map(t => `<li>${t}</li>`).join('');
+
+  const stagedBullets = [
+    `40% due at signing — ${fmt(stage1)}`,
+    `20% due at project midpoint — ${fmt(stage2)}`,
+    `40% due upon completion — ${fmt(stage3)}`,
+    metBullet,
+    `Fixed-bid engagement · No automatic renewal`,
+    `Either party may terminate with 30 days written notice`,
+  ].filter(Boolean).map(t => `<li>${t}</li>`).join('');
+
+  document.getElementById('duration-grid').innerHTML = termBanner + `
+    <div class="dur-card" id="dc-upfront" onclick="selectPaySchedule('upfront')">
+      <div class="dur-badge">Save ${Math.round(UPFRONT_DISCOUNT*100)}%</div>
+      <div class="dur-title">Billed Upfront</div>
+      <div class="dur-price">${fmt(upfront)}<span> total</span></div>
+      <p class="dur-desc">One invoice at signing for the full engagement, at a preferred rate.</p>
+      <ul class="dur-list">${upfrontBullets}</ul>
+    </div>
+    <div class="dur-card" id="dc-staged" onclick="selectPaySchedule('staged')">
+      <div class="dur-title">Bill in Stages</div>
+      <div class="dur-price">${fmt(base)}<span> total</span></div>
+      <p class="dur-desc">Invoiced in three stages as the engagement progresses — 40% / 20% / 40%.</p>
+      <ul class="dur-list">${stagedBullets}</ul>
+    </div>`;
+  if (S.paySchedule) {
+    const el = document.getElementById(`dc-${S.paySchedule}`);
+    if (el) { el.classList.add('selected'); document.getElementById('btn-dur-next').disabled = false; }
   } else {
-    const qtrBullets = [
-      `Quick Wins invoiced in full at activation — 1 quarter`,
-      `Comprehensive Wins invoiced across their estimated term`,
-      metTotal > 0 ? `ME&amp;T (for included wins) invoiced separately — ${fmt(metTotal)}/6 months, semi-annual` : null,
-      `Fixed ${termQtrs}-quarter term · No automatic renewal`,
-      `Either party may terminate with 30 days written notice`,
-    ].filter(Boolean).map(t => `<li>${t}</li>`).join('');
-
-    const upfrontBullets = [
-      `One invoice at signing covers your full ${termQtrs}-quarter engagement`,
-      `Save ${fmt(savings)} — ${Math.round(UPFRONT_DISCOUNT*100)}% preferred rate`,
-      metTotal > 0 ? `ME&amp;T (for included wins) invoiced separately — ${fmt(metTotal)}/6 months, semi-annual` : null,
-      `Fixed ${termQtrs}-quarter term · No automatic renewal`,
-      `Either party may terminate with 30 days written notice`,
-    ].filter(Boolean).map(t => `<li>${t}</li>`).join('');
-
-    document.getElementById('duration-grid').innerHTML = termBanner + `
-      <div class="dur-card" id="dc-quarterly" onclick="selectPaySchedule('quarterly')">
-        <div class="dur-title">Quarterly Invoicing</div>
-        <div class="dur-price">${fmt(base)}<span> total</span></div>
-        <p class="dur-desc">Invoiced at the start of each quarter as your engagement progresses.</p>
-        <ul class="dur-list">${qtrBullets}</ul>
-      </div>
-      <div class="dur-card" id="dc-upfront" onclick="selectPaySchedule('upfront')">
-        <div class="dur-badge">Save ${Math.round(UPFRONT_DISCOUNT*100)}%</div>
-        <div class="dur-title">Upfront Payment</div>
-        <div class="dur-price">${fmt(upfront)}<span> total</span></div>
-        <p class="dur-desc">One invoice at signing covers your full ${termQtrs}-quarter engagement at a preferred rate.</p>
-        <ul class="dur-list">${upfrontBullets}</ul>
-      </div>`;
-    if (S.paySchedule) {
-      const el = document.getElementById(`dc-${S.paySchedule}`);
-      if (el) { el.classList.add('selected'); document.getElementById('btn-dur-next').disabled = false; }
-    }
+    document.getElementById('btn-dur-next').disabled = true;
   }
 
   const metWins = nowWins.filter(o => winMETIncluded(o) && winMETPrice(o) > 0);
@@ -1101,7 +1055,7 @@ function renderSummary() {
     <div class="summary-row"><div class="s-label">Now — Immediate</div><div class="s-value">${nowWins.map(o=>o.title).join(', ') || '—'}</div></div>
     ${nextWins.length?`<div class="summary-row"><div class="s-label">Next — On deck</div><div class="s-value">${nextWins.map(o=>o.title).join(', ')}</div></div>`:''}
     ${laterWins.length?`<div class="summary-row"><div class="s-label">Later — Future phase</div><div class="s-value">${laterWins.map(o=>o.title).join(', ')}</div></div>`:''}
-    <div class="summary-row"><div class="s-label">Payment</div><div class="s-value">${S.paySchedule === 'upfront' ? 'Pay upfront (10% discount)' : 'Quarterly, as delivered'}</div></div>
+    <div class="summary-row"><div class="s-label">Payment</div><div class="s-value">${S.paySchedule === 'upfront' ? `Billed upfront (${Math.round(UPFRONT_DISCOUNT*100)}% discount)` : 'Staged — 40% / 20% / 40%'}</div></div>
     <div class="summary-row"><div class="s-label">Base engagement — Now wins</div><div class="s-value big">${fmt(price)}</div></div>
     ${S.paySchedule === 'upfront' ? `<div class="summary-row"><div class="s-label">Savings</div><div class="s-value green">${fmt(savings)} preferred rate discount</div></div>` : ''}
     ${metTotal > 0 ? `<div class="summary-row"><div class="s-label">ME&amp;T Bundle (billed semi-annually)</div><div class="s-value green">${fmt(metTotal)}/6 months</div></div>` : ''}`;
@@ -1125,7 +1079,7 @@ function renderLOI() {
 
   document.getElementById('loi-overview').innerHTML = `
     <tr><td>Client</td><td>${S.company}${S.contact?' · '+S.contact:''}</td></tr>
-    <tr><td>Payment</td><td>${S.paySchedule === 'upfront' ? 'Upfront — full engagement at preferred rate (10% discount)' : 'Quarterly, billed as delivered'}</td></tr>
+    <tr><td>Payment</td><td>${S.paySchedule === 'upfront' ? `Upfront — full engagement at preferred rate (${Math.round(UPFRONT_DISCOUNT*100)}% discount)` : 'Staged — 40% at signing, 20% at midpoint, 40% upon completion'}</td></tr>
     <tr><td>Estimated start</td><td>Within 30 days of signed agreement</td></tr>`;
 
   const metScopeWins = nowWins.filter(o => winMETIncluded(o) && winMETPrice(o) > 0);
@@ -1167,8 +1121,8 @@ function renderLOI() {
     ${laterWins.length ? `
     <tr><td colspan="2" style="font-weight:700;color:var(--navy-text);padding-top:16px;padding-bottom:6px;">Later — Future Phase</td></tr>
     ${laterWins.map(o=>`<tr><td>${o.title}</td><td style="color:var(--gray-400);">${winPriceLabel(o)}</td></tr>`).join('')}` : ''}
-    <tr><td style="padding-top:14px;">Invoicing</td><td style="padding-top:14px;">${S.paySchedule === 'upfront' ? 'Single invoice at signing — full engagement, preferred rate' : 'Invoiced at the start of each quarter through the engagement term'}</td></tr>
-    <tr><td>Renewal</td><td>None — fixed-term engagement. Terminable with 30 days written notice.</td></tr>`;
+    <tr><td style="padding-top:14px;">Invoicing</td><td style="padding-top:14px;">${S.paySchedule === 'upfront' ? 'Single invoice at signing — full engagement, preferred rate' : `Staged — ${fmt(Math.round(base*0.4))} at signing, ${fmt(Math.round(base*0.2))} at midpoint, ${fmt(base - Math.round(base*0.4) - Math.round(base*0.2))} upon completion`}</td></tr>
+    <tr><td>Renewal</td><td>None — fixed-bid engagement. Terminable with 30 days written notice.</td></tr>`;
 }
 
 function checkSig() {
@@ -1208,7 +1162,7 @@ function submitLOI() {
       'NOW WINS:',
       ...nowWins.map(o => `  • ${o.title} (${o.tier === 'QW' ? 'Quick Win · 1 qtr' : 'Comp. Win · ~' + winQtrs(o) + ' qtrs'}) — ${fmt(winPrice(o))}`),
       '',
-      `Base Total:   ${fmt(price)}${S.paySchedule === 'upfront' ? ' (upfront, 10% discount)' : ' (quarterly billing)'}`,
+      `Base Total:   ${fmt(price)}${S.paySchedule === 'upfront' ? ` (upfront, ${Math.round(UPFRONT_DISCOUNT*100)}% discount)` : ' (staged billing — 40/20/40)'}`,
     ];
     if (metTotal > 0) bodyLines.push(`ME&T Bundle:  ${fmt(metTotal)}/6 months`);
     bodyLines.push('', 'Follow up within 1 business day to activate the engagement.');
@@ -1217,7 +1171,7 @@ function submitLOI() {
     setTimeout(() => { window.location.href = `mailto:${S.repEmail}?subject=${subject}&body=${body}`; }, 400);
   }
   document.getElementById('confirm-summary').textContent =
-    `${nowWins.length} Now win${nowWins.length!==1?'s':''} · ${fmt(price)} base${metTotal>0?' + ME&T':''} · ${S.paySchedule === 'upfront' ? 'Upfront' : 'Quarterly'}`;
+    `${nowWins.length} Now win${nowWins.length!==1?'s':''} · ${fmt(price)} base${metTotal>0?' + ME&T':''} · ${S.paySchedule === 'upfront' ? 'Billed Upfront' : 'Staged (40/20/40)'}`;
   goTo(8);
 }
 
@@ -1326,3 +1280,4 @@ function copyLeadLink() {
 </script>
 </body>
 </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
