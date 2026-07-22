@@ -91,6 +91,33 @@ h2 { font-family: var(--font-display); font-size: 36px; font-weight: 400; color:
 .add-win-fields .admin-input { margin-bottom: 0; }
 .add-win-btn { flex-shrink: 0; width: 42px; height: 42px; border-radius: 8px; border: none; background: var(--green); color: white; font-size: 20px; font-weight: 700; cursor: pointer; transition: background 0.15s; line-height: 1; }
 .add-win-btn:hover { background: var(--green-dark); }
+.new-win-tier-row { display: flex; gap: 8px; align-items: center; }
+.align-prompt-box { background: var(--gray-100); border-radius: 12px; padding: 28px; margin-bottom: 24px; text-align: center; }
+.align-prompt-box p { font-size: 15px; color: var(--navy-text); margin-bottom: 18px; }
+.reviewer-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+.reviewer-row .admin-input { margin-bottom: 0; flex: 1; }
+/* ── TIMELINE / GANTT ── */
+.plan-view-toggle { display: inline-flex; background: var(--gray-100); border-radius: 10px; padding: 4px; margin-bottom: 20px; gap: 4px; }
+.view-toggle-btn { border: none; background: transparent; padding: 8px 18px; border-radius: 7px; font-family: inherit; font-size: 13px; font-weight: 600; color: var(--gray-400); cursor: pointer; transition: all 0.15s; }
+.view-toggle-btn.active { background: white; color: var(--navy-text); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.gantt-legend { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; font-size: 12px; color: var(--gray-400); margin-bottom: 16px; }
+.gantt-legend-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+.gantt-legend-note { font-size: 12px; color: var(--gray-300); font-style: italic; }
+.gantt-scroll { overflow-x: auto; padding-bottom: 8px; }
+.gantt-grid { display: grid; row-gap: 6px; column-gap: 0; align-items: center; position: relative; min-width: 560px; }
+.gantt-scale-cell { font-size: 11px; font-weight: 700; color: var(--gray-400); text-align: center; padding: 6px 4px 10px; border-bottom: 2px solid var(--gray-100); text-transform: uppercase; letter-spacing: 0.5px; }
+.gantt-phase-tag { font-size: 10px; font-weight: 700; color: white; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; border-radius: 6px; margin: 10px 0 2px; }
+.gantt-phase-tag span { text-transform: none; letter-spacing: 0; font-size: 11px; }
+.gantt-row-label { font-size: 13px; color: var(--navy-text); padding-right: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gantt-bar { height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.15); margin: 0 3px; }
+.gantt-bar-label { font-size: 11px; font-weight: 600; color: white; white-space: nowrap; }
+.gantt-divider { border-left: 2px dashed var(--gray-300); pointer-events: none; }
+.new-win-tier-btn { padding: 8px 14px; border-radius: 6px; font-family: var(--font-primary); font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; border: 2px solid var(--gray-200); background: white; color: var(--gray-400); }
+.new-win-tier-btn:hover { border-color: var(--navy-text); color: var(--navy-text); }
+.new-win-tier-btn.sel-qw { border-color: var(--green); background: rgba(34,177,97,0.1); color: var(--green-dark); }
+.new-win-tier-btn.sel-cw { border-color: var(--teal); background: rgba(9,137,177,0.1); color: var(--teal); }
+.new-win-tier-hint { font-size: 11px; color: var(--gray-300); }
+.new-win-tier-hint.error { color: #DC2626; font-weight: 600; }
 
 /* ── IMPORTANCE RATING ── */
 .imp-card { background: white; border: 2px solid var(--gray-100); border-radius: 10px; padding: 18px 22px; margin-bottom: 10px; display: flex; align-items: center; gap: 16px; transition: background 0.2s, border-color 0.2s; }
@@ -378,6 +405,11 @@ h2 { font-family: var(--font-display); font-size: 36px; font-weight: 400; color:
       <div class="add-win-fields">
         <input type="text" id="new-win-title" class="admin-input" placeholder="Title — add another win you'd like included...">
         <input type="text" id="new-win-desc" class="admin-input" placeholder="Description (optional)" onkeydown="if(event.key==='Enter'){ addWinFromField(); }">
+        <div class="new-win-tier-row">
+          <button type="button" class="new-win-tier-btn" data-tier="QW" onclick="pickNewWinTier(this)">Quick Win</button>
+          <button type="button" class="new-win-tier-btn" data-tier="CW" onclick="pickNewWinTier(this)">Comprehensive Win</button>
+          <span class="new-win-tier-hint" id="new-win-tier-hint">Select a type before adding</span>
+        </div>
       </div>
       <button type="button" class="add-win-btn" title="Add this win" onclick="addWinFromField()">+</button>
     </div>
@@ -447,16 +479,41 @@ h2 { font-family: var(--font-display); font-size: 36px; font-weight: 400; color:
     <h2>Here's what you've chosen</h2>
     <p class="lead">Review before moving to the Letter of Intent. Go back to adjust anything.</p>
     <div class="summary-box" id="summary-box"></div>
-    <div class="pause-notice"><strong>Fixed-term engagement:</strong> This is a defined engagement with a clear end date — not an open-ended subscription. Either party may terminate with 30 days written notice prior to the start of any remaining quarter.</div>
+    <div class="pause-notice"><strong>Fixed-term engagement:</strong> This is a defined engagement with a clear end date — not an open-ended subscription.</div>
     <div class="btn-row">
       <button class="btn-secondary" onclick="goTo(5)">← Adjust</button>
-      <button class="btn-primary" onclick="goTo(7)" style="font-size:17px;padding:16px 40px;">Proceed to Letter of Intent →</button>
+      <button class="btn-primary" onclick="goTo(7)" style="font-size:17px;padding:16px 40px;">Continue →</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ S7: LOI ═══ -->
+<!-- ═══ S7: CONFIRM ALIGNMENT (optional) ═══ -->
 <div class="screen" id="screen-7">
+  <div class="nav"><div class="nav-wordmark"><img class="brand-logo" alt="Augusto Digital" src="augusto-logo.png"></div></div>
+  <div class="content fade-in">
+    <div class="section-label">Optional · Before You Sign</div>
+    <h2>Confirm alignment with your team</h2>
+    <p class="lead">If others need to review this roadmap before it moves to a Letter of Intent, add them below. Otherwise, continue whenever you're ready.</p>
+    <div id="align-prompt" class="align-prompt-box">
+      <p>Do others need to confirm alignment before signing?</p>
+      <div class="btn-row" style="justify-content:center;">
+        <button class="btn-secondary" onclick="skipAlignment()">No — continue</button>
+        <button class="btn-primary" onclick="showReviewerFields()">Yes — add reviewers</button>
+      </div>
+    </div>
+    <div id="align-fields" style="display:none;">
+      <div id="reviewer-rows"></div>
+      <button type="button" class="add-win-btn" title="Add another reviewer" onclick="addReviewerRow()" style="margin-bottom:24px;">+</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goTo(6)">← Adjust</button>
+      <button class="btn-primary" id="btn-align-next" onclick="continueFromAlignment()" style="display:none;">Continue to Letter of Intent →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S8: LOI ═══ -->
+<div class="screen" id="screen-8">
   <div class="nav"><div class="nav-wordmark"><img class="brand-logo" alt="Augusto Digital" src="augusto-logo.png"></div></div>
   <div class="step2-bar">
     <div class="step2-inner">
@@ -497,14 +554,14 @@ h2 { font-family: var(--font-display); font-size: 36px; font-weight: 400; color:
       </div>
     </div>
     <div class="btn-row" style="justify-content:space-between;">
-      <button class="btn-secondary" onclick="goTo(6)">← Back</button>
+      <button class="btn-secondary" onclick="goTo(7)">← Back</button>
       <button class="btn-primary" id="btn-submit" onclick="submitLOI()" disabled style="font-size:16px;padding:16px 40px;">Submit Letter of Intent ✓</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ S8: CONFIRMATION ═══ -->
-<div class="screen" id="screen-8">
+<!-- ═══ S9: CONFIRMATION ═══ -->
+<div class="screen" id="screen-9">
   <div class="nav"><div class="nav-wordmark"><img class="brand-logo" alt="Augusto Digital" src="augusto-logo.png"></div></div>
   <div class="confirm-body">
     <div class="confirm-check">✓</div>
@@ -548,9 +605,10 @@ const S = {
   opps: [],   // { title, desc, tier:'QW'|'CW', bucket, price, cwQtrs, metPrice, metIncluded, timing, func }
   archivedOpps: [], // wins removed via the trash icon — reactivate any time
   qwUC: [], cwUC: [],
+  reviewers: [], // { name, email } — optional stakeholders to confirm alignment before the LOI
 };
 const UPFRONT_DISCOUNT = 0.05;
-let dragSrc = null, oppCount = 0, oppIds = [], isLeadMode = false;
+let dragSrc = null, oppCount = 0, oppIds = [], isLeadMode = false, newWinTier = null, planViewMode = 'list';
 
 // ─── HELPERS ───────────────────────────────────────────────
 function winQtrs(o)       { return o.tier === 'CW' ? (o.bucket === 'q3' ? Math.max(3, o.cwQtrs || 3) : 2) : 1; }
@@ -607,7 +665,8 @@ function goTo(n) {
   if (n === 4) renderEngagementPlan();
   if (n === 5) renderPaymentSchedule();
   if (n === 6) renderSummary();
-  if (n === 7) renderLOI();
+  if (n === 7) renderAlignment();
+  if (n === 8) renderLOI();
 }
 
 // ─── ADMIN ─────────────────────────────────────────────────
@@ -829,17 +888,37 @@ function renderArchiveList() {
     </div>`).join('');
 }
 
+function pickNewWinTier(btn) {
+  newWinTier = btn.dataset.tier;
+  document.querySelectorAll('.new-win-tier-btn').forEach(b => b.classList.remove('sel-qw','sel-cw'));
+  btn.classList.add(newWinTier === 'QW' ? 'sel-qw' : 'sel-cw');
+  const hint = document.getElementById('new-win-tier-hint');
+  hint.textContent = newWinTier === 'QW' ? 'Quick Win selected' : 'Comprehensive Win selected';
+  hint.classList.remove('error');
+}
+
 function addWinFromField() {
   const titleInput = document.getElementById('new-win-title');
   const descInput  = document.getElementById('new-win-desc');
   const title = titleInput.value.trim();
   const desc  = descInput.value.trim();
   if (!title) { titleInput.focus(); return; }
-  const bucket = bucketsFor('QW')[0];
-  S.opps.push({ title, desc, tier: 'QW', bucket: bucket.id, price: bucket.min, cwQtrs: 3, metPrice: 0, metIncluded: true, timing: null, func: 'Company' });
+  if (!newWinTier) {
+    const hint = document.getElementById('new-win-tier-hint');
+    hint.textContent = 'Please choose Quick Win or Comprehensive Win';
+    hint.classList.add('error');
+    return;
+  }
+  const bucket = bucketsFor(newWinTier)[0];
+  S.opps.push({ title, desc, tier: newWinTier, bucket: bucket.id, price: bucket.min, cwQtrs: 3, metPrice: 0, metIncluded: true, timing: null, func: 'Company' });
   titleInput.value = '';
   descInput.value = '';
   titleInput.focus();
+  newWinTier = null;
+  document.querySelectorAll('.new-win-tier-btn').forEach(b => b.classList.remove('sel-qw','sel-cw'));
+  const hint = document.getElementById('new-win-tier-hint');
+  hint.textContent = 'Select a type before adding';
+  hint.classList.remove('error');
   renderDragList();
   renderTimingList();
 }
@@ -936,8 +1015,11 @@ function renderEngagementPlan() {
     }).join('');
   }
 
-  function bucketSection(label, cls, desc, wins, bgStyle) {
+  function bucketSection(label, cls, desc, wins, bgStyle, opts) {
     if (!wins.length) return '';
+    opts = opts || {};
+    const collapsible = !!opts.collapsible;
+    const sectionId = opts.id || label.toLowerCase();
     const base = wins.reduce((s,o) => s + winPrice(o), 0);
     const met  = wins.reduce((s,o) => s + winMETTotal(o), 0);
     const metFooter = met > 0 ? `
@@ -949,12 +1031,23 @@ function renderEngagementPlan() {
         <div style="font-size:12px;color:rgba(255,255,255,0.45);">Total investment (incl. ME&amp;T)</div>
         <div style="font-size:22px;font-weight:700;color:white;">${fmt(base + met)}</div>
       </div>` : '';
+    const headerStyle = `display:flex;align-items:center;gap:10px;margin-bottom:10px;${collapsible ? 'cursor:pointer;' : ''}`;
+    const headerOnclick = collapsible ? ` onclick="toggleSectionCollapse('${sectionId}')"` : '';
+    const summaryTag = collapsible ? `
+          <div style="margin-left:auto;display:flex;align-items:center;gap:10px;">
+            <span style="font-size:13px;font-weight:600;color:var(--navy-text);">${wins.length} win${wins.length!==1?'s':''} · ${fmt(base+met)}</span>
+            <span id="chevron-${sectionId}" style="font-size:11px;color:var(--gray-400);">▸ View details</span>
+          </div>` : '';
+    const bodyOpen = collapsible ? `<div id="plan-body-${sectionId}" style="display:none;">` : '';
+    const bodyClose = collapsible ? `</div>` : '';
     return `
       <div style="margin-bottom:16px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <div style="${headerStyle}"${headerOnclick}>
           <div style="background:${cls};color:white;font-size:10px;font-weight:700;padding:4px 12px;border-radius:10px;text-transform:uppercase;letter-spacing:0.5px;">${label}</div>
           <div style="font-size:13px;color:var(--gray-400);">${desc}</div>
+          ${summaryTag}
         </div>
+        ${bodyOpen}
         <div class="plan-table">
           <div class="plan-table-head" style="grid-template-columns:1fr 140px;"><div>Win</div><div class="plan-col-right">Investment</div></div>
           ${winRows(wins)}
@@ -969,12 +1062,15 @@ function renderEngagementPlan() {
             ${metFooter}
           </div>
         </div>
+        ${bodyClose}
       </div>`;
   }
 
   const nowSection = bucketSection('Now', 'var(--green)', 'Immediate activation — <strong style="color:var(--navy-text);">billed upon approval of this proposal</strong>', nowWins, 'var(--navy-bg)');
-  const nextSection = bucketSection('Next', 'var(--teal)', 'On deck — <strong style="color:var(--navy-text);">activated upon your confirmation after Now completes</strong>', nextWins, 'var(--teal)');
-  const laterSection = bucketSection('Later', 'var(--gray-400)', 'Future phase — <strong style="color:var(--navy-text);">execute when your organization is ready</strong>', laterWins, 'var(--gray-300)');
+  const nextSection = bucketSection('Next', 'var(--teal)', 'On deck — <strong style="color:var(--navy-text);">activated upon your confirmation after Now completes</strong>', nextWins, 'var(--teal)', {collapsible:true, id:'next'});
+  const laterSection = bucketSection('Later', 'var(--gray-400)', 'Future phase — <strong style="color:var(--navy-text);">execute when your organization is ready</strong>', laterWins, 'var(--gray-300)', {collapsible:true, id:'later'});
+
+  const ganttHTML = renderGanttHTML(nowWins, nextWins, laterWins);
 
   const qwUCItems = (S.qwUC.length ? S.qwUC : ['AI-assisted email & proposal drafting','Automated meeting summaries','Intelligent document extraction','Contract review automation','Data reporting & dashboards','Lead qualification scoring','Customer support routing','Invoice processing automation'])
     .map(u => `<div class="ref-item">${u}</div>`).join('');
@@ -988,9 +1084,18 @@ function renderEngagementPlan() {
     <div class="section-label">Step 1 of 2 · Alignment</div>
     <h2>Your engagement plan</h2>
     <p class="lead">Here's how your wins are structured across implementation phases. Now wins are billed on approval. Next and Later activate as each prior phase completes. Where offered, you can include or remove the ME&amp;T bundle for each win.</p>
-    ${nowSection}
-    ${nextSection}
-    ${laterSection || '<div style="margin-bottom:28px;"></div>'}
+    <div class="plan-view-toggle">
+      <button type="button" class="view-toggle-btn ${planViewMode==='list'?'active':''}" id="view-btn-list" onclick="setPlanView('list')">List View</button>
+      <button type="button" class="view-toggle-btn ${planViewMode==='timeline'?'active':''}" id="view-btn-timeline" onclick="setPlanView('timeline')">Timeline View</button>
+    </div>
+    <div id="plan-list-view" style="display:${planViewMode==='list'?'block':'none'};">
+      ${nowSection}
+      ${nextSection}
+      ${laterSection || '<div style="margin-bottom:28px;"></div>'}
+    </div>
+    <div id="plan-timeline-view" style="display:${planViewMode==='timeline'?'block':'none'};">
+      ${ganttHTML}
+    </div>
     <div style="margin-top:8px;">
       <button class="ref-toggle-btn" onclick="toggleRef(this)">
         <span>↓</span> View engagement type examples
@@ -1018,6 +1123,148 @@ function toggleRef(btn) {
   const body = document.getElementById('ref-body');
   body.classList.toggle('open');
   btn.querySelector('span').textContent = body.classList.contains('open') ? '↑' : '↓';
+}
+
+function toggleSectionCollapse(id) {
+  const body = document.getElementById('plan-body-' + id);
+  const chevron = document.getElementById('chevron-' + id);
+  if (!body) return;
+  const isHidden = body.style.display === 'none';
+  body.style.display = isHidden ? 'block' : 'none';
+  if (chevron) chevron.textContent = isHidden ? '▾ Hide details' : '▸ View details';
+}
+
+// ─── TIMELINE / GANTT ────────────────────────────────────────
+function setPlanView(mode) {
+  planViewMode = mode;
+  const listView = document.getElementById('plan-list-view');
+  const timelineView = document.getElementById('plan-timeline-view');
+  if (listView) listView.style.display = mode === 'list' ? 'block' : 'none';
+  if (timelineView) timelineView.style.display = mode === 'timeline' ? 'block' : 'none';
+  const btnList = document.getElementById('view-btn-list');
+  const btnTimeline = document.getElementById('view-btn-timeline');
+  if (btnList) btnList.classList.toggle('active', mode === 'list');
+  if (btnTimeline) btnTimeline.classList.toggle('active', mode === 'timeline');
+}
+
+function renderGanttHTML(nowWins, nextWins, laterWins) {
+  if (!nowWins.length && !nextWins.length && !laterWins.length) {
+    return `<div style="padding:48px 20px;text-align:center;color:var(--gray-400);font-size:14px;">Assign timing to your wins on the previous step to see the timeline.</div>`;
+  }
+
+  const nowQtrs   = nowWins.length   ? Math.max(...nowWins.map(winQtrs))   : 0;
+  const nextQtrs  = nextWins.length  ? Math.max(...nextWins.map(winQtrs))  : 0;
+  const laterQtrs = laterWins.length ? Math.max(...laterWins.map(winQtrs)) : 0;
+
+  const nowStart   = 1;
+  const nextStart  = nowStart + nowQtrs;
+  const laterStart = nextStart + nextQtrs;
+
+  const totalQtrs = Math.max(
+    nowWins.length   ? nowStart   + nowQtrs   - 1 : 0,
+    nextWins.length  ? nextStart  + nextQtrs  - 1 : 0,
+    laterWins.length ? laterStart + laterQtrs - 1 : 0,
+    1
+  );
+
+  const colTemplate = `200px repeat(${totalQtrs}, minmax(64px, 1fr))`;
+  let items = [];
+  let row = 1;
+
+  items.push(`<div style="grid-row:${row};grid-column:1;"></div>`);
+  for (let q = 1; q <= totalQtrs; q++) {
+    items.push(`<div class="gantt-scale-cell" style="grid-row:${row};grid-column:${1+q};">Q${q}</div>`);
+  }
+  row++;
+
+  function addGroup(label, wins, color, start) {
+    if (!wins.length) return;
+    items.push(`<div class="gantt-phase-tag" style="grid-row:${row};grid-column:1 / -1;background:${color};">${label} <span>— begins Q${start}</span></div>`);
+    row++;
+    wins.forEach(o => {
+      const dur = winQtrs(o);
+      items.push(`<div class="gantt-row-label" style="grid-row:${row};grid-column:1;">${o.title}</div>`);
+      items.push(`<div class="gantt-bar" style="grid-row:${row};grid-column:${1+start} / span ${dur};background:${color};" title="${o.title} — ${dur} quarter${dur!==1?'s':''}"><span class="gantt-bar-label">${dur} qtr${dur!==1?'s':''}</span></div>`);
+      row++;
+    });
+  }
+
+  addGroup('NOW',   nowWins,   'var(--green)',    nowStart);
+  addGroup('NEXT',  nextWins,  'var(--teal)',     nextStart);
+  addGroup('LATER', laterWins, 'var(--gray-400)', laterStart);
+
+  const lastRow = row - 1;
+
+  const dividers = [];
+  if (nowWins.length && (nextWins.length || laterWins.length) && nextStart > nowStart) dividers.push(nextStart);
+  if (laterWins.length && (nowWins.length || nextWins.length) && laterStart > nextStart) dividers.push(laterStart);
+  const dividerHTML = dividers.map(q => `<div class="gantt-divider" style="grid-row:1 / ${lastRow+1};grid-column:${1+q};"></div>`).join('');
+
+  return `
+    <div class="gantt-legend">
+      <span><span class="gantt-legend-dot" style="background:var(--green);"></span>Now</span>
+      <span><span class="gantt-legend-dot" style="background:var(--teal);"></span>Next</span>
+      <span><span class="gantt-legend-dot" style="background:var(--gray-400);"></span>Later</span>
+      <span class="gantt-legend-note">Wins within the same phase run in parallel. Each phase begins once the prior phase's longest win completes.</span>
+    </div>
+    <div class="gantt-scroll">
+      <div class="gantt-grid" style="grid-template-columns:${colTemplate};">
+        ${items.join('')}
+        ${dividerHTML}
+      </div>
+    </div>`;
+}
+
+// ─── CONFIRM ALIGNMENT (optional reviewer step) ─────────────
+function renderReviewerRows() {
+  const wrap = document.getElementById('reviewer-rows');
+  if (!wrap) return;
+  wrap.innerHTML = S.reviewers.map((r, i) => `
+    <div class="reviewer-row">
+      <input type="text" class="admin-input" placeholder="Name" value="${r.name || ''}" oninput="updateReviewerField(${i}, 'name', this.value)">
+      <input type="email" class="admin-input" placeholder="Email" value="${r.email || ''}" oninput="updateReviewerField(${i}, 'email', this.value)">
+      <button type="button" class="opp-trash-btn" title="Remove reviewer" onclick="removeReviewerRow(${i})">🗑</button>
+    </div>`).join('');
+}
+
+function updateReviewerField(i, field, val) {
+  if (!S.reviewers[i]) return;
+  S.reviewers[i][field] = val;
+}
+
+function addReviewerRow() {
+  S.reviewers.push({ name: '', email: '' });
+  renderReviewerRows();
+}
+
+function removeReviewerRow(i) {
+  S.reviewers.splice(i, 1);
+  renderReviewerRows();
+}
+
+function showReviewerFields() {
+  document.getElementById('align-prompt').style.display = 'none';
+  document.getElementById('align-fields').style.display = 'block';
+  document.getElementById('btn-align-next').style.display = 'inline-block';
+  if (!S.reviewers.length) addReviewerRow();
+}
+
+function skipAlignment() {
+  S.reviewers = [];
+  goTo(8);
+}
+
+function continueFromAlignment() {
+  S.reviewers = S.reviewers.filter(r => (r.name && r.name.trim()) || (r.email && r.email.trim()));
+  goTo(8);
+}
+
+function renderAlignment() {
+  const hasReviewers = S.reviewers.length > 0;
+  document.getElementById('align-prompt').style.display = hasReviewers ? 'none' : 'block';
+  document.getElementById('align-fields').style.display = hasReviewers ? 'block' : 'none';
+  document.getElementById('btn-align-next').style.display = hasReviewers ? 'inline-block' : 'none';
+  renderReviewerRows();
 }
 
 // ─── SCREEN 5: PAYMENT SCHEDULE ────────────────────────────
@@ -1060,13 +1307,11 @@ function renderPaymentSchedule() {
     `Save ${fmt(savings)} — ${Math.round(UPFRONT_DISCOUNT*100)}% preferred rate`,
     metBullet,
     `Fixed-bid engagement · No automatic renewal`,
-    `Either party may terminate with 30 days written notice`,
   ].filter(Boolean).map(t => `<li>${t}</li>`).join('');
 
   const stagedBullets = [
     metBullet,
     `Fixed-bid engagement · No automatic renewal`,
-    `Either party may terminate with 30 days written notice`,
   ].filter(Boolean).map(t => `<li>${t}</li>`).join('');
 
   const stageGrid = `
@@ -1249,7 +1494,7 @@ function submitLOI() {
   }
   document.getElementById('confirm-summary').textContent =
     `${nowWins.length} Now win${nowWins.length!==1?'s':''} · ${fmt(price)} base${metTotal>0?' + ME&T':''} · ${S.paySchedule === 'upfront' ? 'Billed Upfront' : 'Staged (40/20/40)'}`;
-  goTo(8);
+  goTo(9);
 }
 
 // ─── LEAD LINK ─────────────────────────────────────────────
